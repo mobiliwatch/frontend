@@ -1,0 +1,22 @@
+.outter {
+    padding: 5px;
+}
+.inner {
+    background-color: #ddd;
+}
+.delays {
+  font-size: 30px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  line-height: 1.1;
+}
+.delays ul {
+  display: inline;
+}
+.delays ul li {
+  display: inline;
+  padding-right: 20pt;
+}
+footer {
+  margin-top: 50px;
+}
