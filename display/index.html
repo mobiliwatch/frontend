@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/app.css">
+    <!-- v-cloak: avoid visual glitch until page is ready -->
+    <style> [v-cloak] { display: none } </style>
   </head>
 
   <body>
@@ -14,7 +16,7 @@
       <h1>Mobili<small>.watch</small></h1>
     </div>
 
-    <div class="container-fluid" id="app">
+    <div class="container-fluid" id="app" v-cloak>
 
       <div class="row">
         <div class="col-sm-6 text-center outter">
@@ -34,7 +36,7 @@
           <div class="row">
             <div class="col-sm-12 outter">
               <div class="inner">
-              <h1>{{ line.name }} direction {{ line.direction }}</h1>
+              <h1>{{ line.name }} <small>direction</small> {{ line.direction }}</h1>
               </div>
             </div>
           </div>
@@ -58,10 +60,9 @@
       <p>Concours Mobili’Play</p>
     </footer>
 
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../bower_components/vue/dist/vue.js"></script>
     <script src="js/app.js"></script>
 
   </body>
 </html>
-
