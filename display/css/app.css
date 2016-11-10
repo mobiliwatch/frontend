@@ -1,14 +1,29 @@
-.outter {
-    padding: 5px;
+/*
+ * global
+ */
+
+html, body {
+  height: 100%;
+  margin: 0;
 }
-.inner {
-    background-color: #eee;
+
+#wrapper {
+  min-height: 100%;
 }
+
+footer {
+  margin-top: 50px;
+}
+
+/*
+ * inline delays list
+ */
+
 .delays {
-  font-size: 30px;
+  font-size: 2em;
+  line-height: 1.1;
   margin-top: 20px;
   margin-bottom: 10px;
-  line-height: 1.1;
 }
 .delays ul {
   display: inline;
@@ -17,6 +32,115 @@
   display: inline;
   padding-right: 20pt;
 }
-footer {
-  margin-top: 50px;
+
+/*
+ * dark & light colors
+ */
+
+.dark {
+  background-color: black;
+  color: white;
+}
+
+.light-pannel {
+  padding: 5px;
+}
+
+.light-pannel div {
+  background-color: #eee;
+}
+.dark-pannel {
+  padding: 5px;
+}
+
+.dark-pannel {
+  background-color: black;
+}
+
+/*
+ * font sizes
+ */
+
+.medium {
+  font-size: 2em;
+}
+
+.big {
+  font-size: 3em;
+}
+
+/*
+ * toggleButton CSS
+ * (to be "webpacked")
+ */
+
+/* box around labels and button */
+.toggleContainer {
+  display: flex;
+}
+
+.toggleContainer div {
+  margin: auto 0px;
+}
+
+/* box around the slider */
+.toggleBox {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  margin: auto 10px;
+}
+
+/* hide default HTML checkbox */
+.toggleBox input {
+  display: none;
+}
+
+/* slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* rounded slider */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
 }
