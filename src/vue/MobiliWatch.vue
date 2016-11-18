@@ -1,6 +1,6 @@
 <script>
 var toggleButton = require('./ToggleButton.vue');
-var Widget = require('./Widget.vue');
+var Group = require('./Group.vue');
 
 // Helpers
 function getUrlParameter(name) {
@@ -13,7 +13,7 @@ function getUrlParameter(name) {
 module.exports = {
   components: {
     'toggle-button': toggleButton,
-    'Widget' : Widget,
+    'Group' : Group,
   },
   data: function() {
     return {
@@ -21,6 +21,8 @@ module.exports = {
       slug : '',
       screen : null,
       error : null,
+
+      groups : [],
 
       // Demo
       time: '22:50',
@@ -57,6 +59,37 @@ module.exports = {
       };
       this.$http.get(url, options).then(function(resp){
         this.$set(this, 'screen', resp.body);
+
+
+this.$set(this, 'groups', [
+        {
+          vertical: true,
+          groups : [
+            {
+              vertical: false,
+              groups : [],
+              widgets : [
+                this.screen.widgets[0],
+                this.screen.widgets[1],
+              ]
+            },
+            {
+              vertical: false,
+              groups : [],
+              widgets : [
+                this.screen.widgets[2],
+              ]
+            },
+          ],
+        },
+        {
+          vertical: true,
+          groups : [],
+          widgets : [
+            this.screen.widgets[3],
+          ],
+        },
+      ]);
 
       }).catch(function(err){
         console.log('Failed to load screen', err);
@@ -108,36 +141,9 @@ module.exports = {
       {{ error }}
     </div>
 
-
-<div v-if="screen" class="tile is-ancestor" :style="{height: screenHeight}">
-
-  <div class="tile is-vertical">
-    <div class="tile">
-
-      <div class="tile is-parent">
-        <Widget :widget="screen.widgets[0]" />
-      </div>
-      <div class="tile is-parent">
-        <Widget :widget="screen.widgets[1]" />
-      </div>
-
+    <div v-if="screen" class="tile is-ancestor" :style="{height: screenHeight}">
+      <Group :group="group" v-for="group in groups" />
     </div>
-
-    <div class="tile">
-      <div class="tile is-parent">
-        <Widget :widget="screen.widgets[2]" />
-      </div>
-    </div>
-
-  </div>
-
-  <div class="tile is-parent is-vertical">
-    <Widget :widget="screen.widgets[3]" />
-  </div>
-
-</div>
-
-
 <!--
     <div class="container-fluid" v-cloak>
       <div class="row">

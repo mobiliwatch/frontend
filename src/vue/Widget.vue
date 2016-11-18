@@ -1,15 +1,17 @@
 <template>
-  <article class="tile is-child notification is-info">
-    <div class="content">
-      <p class="title">{{ widget.type }}</p>
-      <p class="subtitle">
-        Widget #{{ widget.id }}
-      </p>
+  <div class="tile is-parent">
+    <article class="tile is-child notification is-info">
       <div class="content">
-        <!-- Content -->
+        <p class="title">{{ widget.type }}</p>
+        <p class="subtitle">
+          Widget #{{ widget.id }}
+        </p>
+        <div class="content">
+          <!-- Content -->
+        </div>
       </div>
-    </div>
-  </article>
+    </article>
+  </div>
 </template>
 
 <script>
