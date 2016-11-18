@@ -5,8 +5,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var webpack = require("webpack");
 
 var DEBUG = process.env.NODE_ENV == 'dev';
-//var API_URL = DEBUG ? 'http://localhost:8000/api' : 'https://mobili.watch/api';
-var API_URL = 'https://mobili.watch/api';
+var API_URL = DEBUG ? 'http://localhost:8000/api' : 'https://mobili.watch/api';
 
 module.exports = {
   entry: 'index.js',
