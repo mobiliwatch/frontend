@@ -26,6 +26,9 @@ module.exports = {
       ]
     }
   },
+  mounted : function(){
+    console.log('APi url', API_URL);   
+  },
   computed: {
     pannelClass: function () {
       return this.cssSelector == 'dark' ? [ 'dark-pannel' ] : [ 'light-pannel' ]
