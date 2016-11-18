@@ -53,43 +53,12 @@ module.exports = {
     // Load a screen data and strore them
     load_screen : function(slug){
       // TODO: use global urls
-      var url = API_URL + '/screen/demo/'; 
+      var url = API_URL + '/screen/' + slug + '/'; 
       var options = {
         credentials : true,
       };
       this.$http.get(url, options).then(function(resp){
         this.$set(this, 'screen', resp.body);
-
-
-this.$set(this, 'groups', [
-        {
-          vertical: true,
-          groups : [
-            {
-              vertical: false,
-              groups : [],
-              widgets : [
-                this.screen.widgets[0],
-                this.screen.widgets[1],
-              ]
-            },
-            {
-              vertical: false,
-              groups : [],
-              widgets : [
-                this.screen.widgets[2],
-              ]
-            },
-          ],
-        },
-        {
-          vertical: true,
-          groups : [],
-          widgets : [
-            this.screen.widgets[3],
-          ],
-        },
-      ]);
 
       }).catch(function(err){
         console.log('Failed to load screen', err);
@@ -142,7 +111,7 @@ this.$set(this, 'groups', [
     </div>
 
     <div v-if="screen" class="tile is-ancestor" :style="{height: screenHeight}">
-      <Group :group="group" v-for="group in groups" />
+      <Group :group="group" v-for="group in screen.groups" />
     </div>
 <!--
     <div class="container-fluid" v-cloak>
