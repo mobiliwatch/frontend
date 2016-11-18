@@ -1,13 +1,28 @@
 <script>
 var toggleButton = require('./ToggleButton.vue');
+var Widget = require('./Widget.vue');
+
+// Helpers
+function getUrlParameter(name) {
+  name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+  var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+  var results = regex.exec(location.search);
+  return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+};
 
 module.exports = {
   components: {
-    'toggle-button': toggleButton
+    'toggle-button': toggleButton,
+    'Widget' : Widget,
   },
   data: function() {
     return {
       cssSelector: 'light',
+      slug : '',
+      screen : null,
+      error : null,
+
+      // Demo
       time: '22:50',
       weather: 'pluie',
       lines: [
@@ -27,19 +42,126 @@ module.exports = {
     }
   },
   mounted : function(){
-    console.log('APi url', API_URL);   
+    // TODO: manage a list of screens
+    this.$set(this, 'slug', getUrlParameter('screen'));
+    if(this.slug)
+      this.load_screen(this.slug);
+  },
+  methods : {
+    // Load a screen data and strore them
+    load_screen : function(slug){
+      // TODO: use global urls
+      var url = API_URL + '/screen/demo/'; 
+      var options = {
+        credentials : true,
+      };
+      this.$http.get(url, options).then(function(resp){
+        this.$set(this, 'screen', resp.body);
+
+      }).catch(function(err){
+        console.log('Failed to load screen', err);
+        this.$set(this, 'error', err); 
+      });
+    }
   },
   computed: {
     pannelClass: function () {
       return this.cssSelector == 'dark' ? [ 'dark-pannel' ] : [ 'light-pannel' ]
-    }
+    },
+    screenHeight : function(){
+      // Calc the remaining height for the tiles
+      var height = window.innerHeight;
+      var navHeight = 60; // hackish
+      return (height - navHeight) + 'px';
+    },
   }
 };
 </script>
 
 <template>
-  <div id="wrapper" v-bind:class="{ dark: cssSelector == 'dark' }">
+  <div id="wrapper" class="fullscreen" v-bind:class="{ dark: cssSelector == 'dark' }">
 
+    <nav class="nav">
+      <div class="nav-left">
+        <div class="nav-item">
+          <p class="title" v-if="screen">{{ screen.name }}</p>
+          <p class="heading">Mobili.Watch</p>
+        </div>
+      </div>
+      <div class="nav-right">
+        <div class="nav-item">
+          <toggle-button
+            option1="dark"
+            option2="light"
+            v-model="cssSelector">
+          </toggle-button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="notification is-info" v-if="!error && !screen">
+      <p v-if="slug">Chargement...</p>
+      <p v-if="!slug">Veuillez sélectionner un écran...</p>
+    </div>
+    <div class="notification is-danger" v-if="error">
+      <h4>Erreur !</h4>
+      {{ error }}
+    </div>
+
+
+<div class="tile is-ancestor" :style="{height: screenHeight}">
+  <div class="tile is-vertical is-4">
+    <div class="tile">
+      <div class="tile is-parent is-vertical">
+        <article class="tile is-child notification is-primary">
+          <p class="title">Vertical...</p>
+          <p class="subtitle">Top tile</p>
+        </article>
+        <article class="tile is-child notification is-warning">
+          <p class="title">...tiles</p>
+          <p class="subtitle">Bottom tile</p>
+        </article>
+      </div>
+      <div class="tile is-parent">
+        <article class="tile is-child notification is-info">
+          <p class="title">Middle tile</p>
+          <p class="subtitle">With an image</p>
+          <figure class="image is-16by9">
+            <img src="http://placehold.it/640x420">
+          </figure>
+        </article>
+      </div>
+    </div>
+    <div class="tile is-parent is-12">
+      <article class="tile is-child notification is-danger">
+        <p class="title">Wide tile</p>
+        <p class="subtitle">Aligned with the right tile</p>
+        <div class="content">
+          <!-- Content -->
+        </div>
+      </article>
+    </div>
+  </div>
+  <div class="tile is-parent ">
+    <article class="tile is-child notification is-success ">
+      <div class="content">
+        <p class="title">Tall tile</p>
+        <p class="subtitle">With even more content</p>
+        <div class="content">
+          <!-- Content -->
+        </div>
+      </div>
+    </article>
+  </div>
+</div>
+
+<!--
+    <div id="widgets" class="tile is-ancestor " v-if="screen">
+      <Widget :widget="w" v-for="w in screen.widgets">
+    </div>
+-->
+
+<!--
     <div class="container-fluid" v-cloak>
       <div class="row">
         <div class="col-sm-12 big text-center">
@@ -49,11 +171,6 @@ module.exports = {
 
       <div class="row">
         <div class="col-sm-12 medium">
-          <toggle-button
-            option1="dark"
-            option2="light"
-            v-model="cssSelector">
-          </toggle-button>
         </div>
       </div>
 
@@ -98,5 +215,12 @@ module.exports = {
     <footer class="container-fluid text-center">
       <p>Concours Mobili’Play</p>
     </footer>
+-->
   </div>
 </template>
+
+<style>
+.nav {
+  background: inherit !important;
+}
+</style>
