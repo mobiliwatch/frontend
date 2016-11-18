@@ -109,57 +109,34 @@ module.exports = {
     </div>
 
 
-<div class="tile is-ancestor" :style="{height: screenHeight}">
-  <div class="tile is-vertical is-4">
+<div v-if="screen" class="tile is-ancestor" :style="{height: screenHeight}">
+
+  <div class="tile is-vertical">
     <div class="tile">
-      <div class="tile is-parent is-vertical">
-        <article class="tile is-child notification is-primary">
-          <p class="title">Vertical...</p>
-          <p class="subtitle">Top tile</p>
-        </article>
-        <article class="tile is-child notification is-warning">
-          <p class="title">...tiles</p>
-          <p class="subtitle">Bottom tile</p>
-        </article>
+
+      <div class="tile is-parent">
+        <Widget :widget="screen.widgets[0]" />
       </div>
       <div class="tile is-parent">
-        <article class="tile is-child notification is-info">
-          <p class="title">Middle tile</p>
-          <p class="subtitle">With an image</p>
-          <figure class="image is-16by9">
-            <img src="http://placehold.it/640x420">
-          </figure>
-        </article>
+        <Widget :widget="screen.widgets[1]" />
+      </div>
+
+    </div>
+
+    <div class="tile">
+      <div class="tile is-parent">
+        <Widget :widget="screen.widgets[2]" />
       </div>
     </div>
-    <div class="tile is-parent is-12">
-      <article class="tile is-child notification is-danger">
-        <p class="title">Wide tile</p>
-        <p class="subtitle">Aligned with the right tile</p>
-        <div class="content">
-          <!-- Content -->
-        </div>
-      </article>
-    </div>
+
   </div>
-  <div class="tile is-parent ">
-    <article class="tile is-child notification is-success ">
-      <div class="content">
-        <p class="title">Tall tile</p>
-        <p class="subtitle">With even more content</p>
-        <div class="content">
-          <!-- Content -->
-        </div>
-      </div>
-    </article>
+
+  <div class="tile is-parent is-vertical">
+    <Widget :widget="screen.widgets[3]" />
   </div>
+
 </div>
 
-<!--
-    <div id="widgets" class="tile is-ancestor " v-if="screen">
-      <Widget :widget="w" v-for="w in screen.widgets">
-    </div>
--->
 
 <!--
     <div class="container-fluid" v-cloak>
@@ -222,5 +199,10 @@ module.exports = {
 <style>
 .nav {
   background: inherit !important;
+}
+
+div.tile.is-ancestor {
+  padding-left: 10px;
+  padding-right: 10px;
 }
 </style>
