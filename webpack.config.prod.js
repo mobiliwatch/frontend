@@ -11,7 +11,11 @@ config.output = {
 // Minimize JS
 config.plugins.push(
   new webpack.optimize.UglifyJsPlugin({
-    minimize: true
+    minimize: true,
+    compress: {
+      warnings: false
+    },
+    mangle: false,
   })
 );
 

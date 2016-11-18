@@ -4,7 +4,7 @@
     <Group :group="g" v-for="g in group.groups" />
 
     <div class="tile" v-for="w in group.widgets">
-      <Widget :widget="w" />
+      <Widget :widgetId="w" />
     </div>
 
   </div>

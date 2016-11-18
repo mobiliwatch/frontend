@@ -40,6 +40,12 @@ module.exports = {
       this.$http.get(url, options).then(function(resp){
         this.$set(this, 'screen', resp.body);
 
+        // Add widgets to stores
+        var store = this.$store;
+        this.screen.widgets.forEach(function(w){
+          store.commit('add_widget', w);
+        });
+
       }).catch(function(err){
         console.log('Failed to load screen', err);
         this.$set(this, 'error', err); 

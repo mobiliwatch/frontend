@@ -2,7 +2,8 @@
   <div class="tile is-parent">
     <article class="tile is-child notification is-info">
       <div class="content">
-        <p class="title">{{ widget.type }} #{{ widget.id }}</p>
+        <p class="title">{{ widget.type }}</p>
+        <p class="subtitle">{{ widget.id }}</p>
         <div class="content">
           <Note v-if="widget.type == 'NoteWidget'" :text="widget.text" />
           <Clock v-if="widget.type == 'ClockWidget'" />
@@ -30,10 +31,16 @@ module.exports = {
     'Location' : Location,
   },
   props : {
-    widget : Object,
+    widgetId : String,
   },
   data : function(){
     return {};
+  },
+  computed : {
+    // Get widget from store
+    widget : function(){
+      return this.$store.state.widgets[this.widgetId];
+    },
   },
 };
 </script>
