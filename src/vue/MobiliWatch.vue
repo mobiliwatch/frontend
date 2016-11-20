@@ -21,6 +21,7 @@ module.exports = {
       slug : '',
       screen : null,
       error : null,
+      ws : null,
     }
   },
   mounted : function(){
@@ -33,11 +34,12 @@ module.exports = {
     // Load a screen data and strore them
     load_screen : function(slug){
       // TODO: use global urls
-      var url = API_URL + '/screen/' + slug + '/'; 
+      var api_url = API_URL + '/screen/' + slug + '/'; 
+      var ws_url = WS_URL + '/screen/' + slug + '/'; 
       var options = {
         credentials : true,
       };
-      this.$http.get(url, options).then(function(resp){
+      this.$http.get(api_url, options).then(function(resp){
         this.$set(this, 'screen', resp.body);
 
         // Add widgets to stores
@@ -46,11 +48,31 @@ module.exports = {
           store.commit('add_widget', w);
         });
 
+        // Setup Websocket
+        var that = this;
+        var ws = new WebSocket(ws_url);
+        ws.onopen = function() {
+          that.$set(that, 'ws', ws);
+          that.ws.onmessage = that.ws_received;
+        }
+
       }).catch(function(err){
         console.log('Failed to load screen', err);
         this.$set(this, 'error', err); 
       });
-    }
+    },
+
+    // Webscoket Message reception
+    ws_received : function(msg){
+
+      // Load msg as json
+      var payload = JSON.parse(msg.data);
+      if(payload.widget && payload.update)
+        this.$store.commit('add_update', payload);
+
+      else
+        console.warn('Unsupported Websocket message', msg);
+    },
   },
   computed: {
     pannelClass: function () {

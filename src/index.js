@@ -10,31 +10,7 @@ Vue.use(Vuex);
 require('bulma/css/bulma.css');
 require('css/app.css');
 
-const store = new Vuex.Store({
-  state: {
-    updates : [],
-    widgets : {},
-  },
-  mutations: {
-    add_update : function(state, update){
-
-      // Fetch widget
-      var widget = state.widgets[update.widget];
-      if(!widget){
-        console.warn('Invalid update', update);
-        return;
-      }
-
-      // Apply change
-      // TODO: real logic
-      widget.text = update.text;
-    },
-    add_widget : function(state, widget){
-      console.log('Add widget', widget.id);
-      state.widgets[widget.id] = widget;
-    },
-  }
-})
+const store = require('./store.js');
 
 // Run our main app
 new Vue({
@@ -43,32 +19,4 @@ new Vue({
   components : {
     'MobiliWatch' : MobiliWatch,
   },
-  data : {
-    'ws' : null,
-  },
-
-  mounted : function(){
-    var that = this;
-
-    // Setup websocket
-    var ws = new WebSocket(WS_URL);
-    ws.onopen = function() {
-      that.$set(that, 'ws', ws);
-      that.ws.onmessage = that.received;
-    }
-  },
-
-  methods : {
-
-    // Message reception
-    received : function(msg){
-      console.log('WS message chat', msg);
-
-      // Send in store
-      this.$store.commit('add_update', {
-        widget : '3aa3b6eb-9b4a-4a46-b4a6-814def7ad23a',
-        text : msg.data,
-      });
-    },
-  }
 });
