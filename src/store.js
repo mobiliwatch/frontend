@@ -11,7 +11,8 @@ module.exports = new Vuex.Store({
     add_update : function(state, payload){
 
       // Check input
-      var widget = state.widgets[payload.widget];
+			var widget_id = payload.widget;
+      var widget = state.widgets[widget_id];
       if(!widget){
         console.warn('No widget found for update', payload);
         return;
@@ -21,16 +22,23 @@ module.exports = new Vuex.Store({
         return;
       }
 
+			// Shallow Clone widgets
+			// Deep is not necessary here
+			// This triggers global updates in components
+			var widgets = _.clone(state.widgets);
+
       // Merge items from payload update
-      widget = _.merge(widget, payload.update);
+      var new_widget = _.merge(widget, payload.update);
 
       // Add meta data
-      widget['updated'] = new Date();
-      widget['revision'] = widget['revision'] + 1;
+      new_widget['updated'] = new Date();
+      new_widget['revision'] = widget['revision'] + 1;
 
-      // Update widget in state
-      Vue.set(state, 'widgets.'+payload.widget, widget);
-      console.debug('Updated widget', widget.id, payload.update);
+			widgets[widget_id] = new_widget;
+
+      // Update widgets in state
+      Vue.set(state, 'widgets', widgets);
+      console.debug('Updated widget', widget_id, payload.update);
     },
     add_widget : function(state, widget){
       // Store an initial widget declaration in store
