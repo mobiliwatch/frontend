@@ -15,7 +15,6 @@ module.exports = {
     new ExtractTextPlugin("[hash].css", {allChunks: false}),
     new WebpackCleanupPlugin(),
     new HtmlWebpackPlugin({
-      title: 'Mobili.Watch',
       template : 'src/index.html'
     }),
     new webpack.DefinePlugin({

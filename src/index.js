@@ -14,7 +14,7 @@ const store = require('./store.js');
 
 // Run our main app
 new Vue({
-  store, // use store everywhere
+  store : store, // use store everywhere
   el : '#app',
   components : {
     'MobiliWatch' : MobiliWatch,

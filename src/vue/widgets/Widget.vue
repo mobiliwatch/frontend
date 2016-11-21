@@ -2,15 +2,24 @@
   <div class="tile is-parent">
     <article class="tile is-child notification is-info">
       <div class="content">
-        <button class="button is-small is-pulled-right" v-on:click="toggle_debug()">Debug</button>
-
 
         <!-- Debug Tools -->
-        <div v-if="debug">
-          <p class="title" v-if="widget">{{ widget.type }}</p>
-          <p class="subtitle">{{ widget.id }}</p>
-          <pre>{{ widget }}</pre>
+        <div class="tools is-12">
+          <span class="tag is-success">Version {{ widget.revision }}</span>
+
+          <span class="tag is-dark" v-if="!widget.updated">Pas de mises à jour</span>
+          <span class="tag is-info" v-if="widget.updated">Mis à jour {{ widget.updated }}</span>
+
+          <button class="button is-small" v-on:click="toggle_debug()">Debug</button>
+
+          <div v-if="debug">
+            <p class="title" v-if="widget">{{ widget.type }}</p>
+            <p class="subtitle">{{ widget.id }}</p>
+            <pre>{{ widget }}</pre>
+          </div>
+          <hr />
         </div>
+
 
         <div class="content">
           <Note v-if="widget.type == 'NoteWidget'" :widgetId="widgetId" />

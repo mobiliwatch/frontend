@@ -11,8 +11,6 @@
         Pas d'horaires.
       </p>
     </div>
-<pre class="is-hidden">{{ widget }}</pre>
-
   </div>
 </template>
 
