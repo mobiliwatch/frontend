@@ -4,8 +4,8 @@
   "description": "Frontend for mobili.watch project",
   "main": "index.js",
   "scripts": {
-    "server": "NODE_ENV=dev webpack-dev-server --content-base build",
-    "build": "NODE_ENV=dev webpack --config webpack.config.js --progress --colors",
+    "server": "webpack-dev-server --content-base build",
+    "build": "webpack --config webpack.config.js --progress --colors",
     "production": "NODE_ENV=prod webpack --config webpack.config.prod.js --progress --colors"
   },
   "repository": {

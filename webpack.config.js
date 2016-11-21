@@ -4,7 +4,7 @@ var WebpackCleanupPlugin = require('webpack-cleanup-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var webpack = require("webpack");
 
-var DEBUG = process.env.NODE_ENV == 'dev';
+var DEBUG = !process.env.NODE_ENV || process.env.NODE_ENV == 'dev';
 var API_URL = DEBUG ? 'http://localhost:8000/api' : 'https://mobili.watch/api';
 var WS_URL = DEBUG ? 'ws://localhost:8000' : 'wss://mobili.watch';
 
