@@ -1,16 +1,16 @@
 <template>
-  <div class="location">
-    Weather is : {{ weather }}
+  <div class="weather">
+    Weather is : {{ widget.weather }}
   </div>
 </template>
 
 <script>
+var mixins = require('./mixins.js');
+
 module.exports = {
-  props : {
-    weather : String,
-  },
+  mixins : [mixins, ],
   data : function(){
     return {};
   }
-}
+};
 </script>

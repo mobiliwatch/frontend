@@ -1,5 +1,5 @@
 var Vuex = require('vuex');
-var _ = require('lodash/core');
+var _ = require('lodash');
 
 module.exports = new Vuex.Store({
   state: {
@@ -20,9 +20,26 @@ module.exports = new Vuex.Store({
         return;
       }
 
+
+      //var nw = _.cloneDeep(widget);
+      var nw = widget;
+      nw = _.merge(nw, payload.update);
+
       // Apply changes from payload's update
-      widget = _.assignIn(widget, payload.update)
-      console.debug('Updated widget', widget.id);
+      nw['updated'] = new Date();
+      nw['revision'] = nw['revision'] + 1;
+      //_.merge(widget, payload.update);
+
+      //_.merge(widget, payload.update);
+      console.debug('Updated widget', widget.id, payload.update);
+
+state.widgets[payload.widget] = nw;
+
+      //widget = _.clone(widget);
+
+console.log(state);
+
+return state;
     },
     add_widget : function(state, widget){
       // Store an initial widget declaration in store

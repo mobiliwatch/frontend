@@ -1,16 +1,16 @@
 <template>
-  <div class="location">
-    {{ text }}
+  <div class="note">
+    {{ widget.text }}
   </div>
 </template>
 
 <script>
+var mixins = require('./mixins.js');
+
 module.exports = {
-  props : {
-    text : String,
-  },
+  mixins : [mixins, ],
   data : function(){
     return {};
   },
-}
+};
 </script>

@@ -1,21 +1,29 @@
 <template>
   <div class="location">
-
-    <div v-for="line_stop in location.line_stops">
+    <div v-for="line_stop in widget.location.line_stops">
       {{ line_stop.line.mode }} {{ line_stop.line.name }} direction {{ line_stop.direction.name }}
+      <ul v-if="line_stop.times.length > 0">
+        <li v-for="t in line_stop.times" >
+          {{ t }}
+        <li>
+      </ul>
+      <p v-if="!line_stop.times.length">
+        Pas d'horaires.
+      </p>
     </div>
+<pre class="is-hidden">{{ widget }}</pre>
 
   </div>
 </template>
 
 <script>
+var mixins = require('./mixins.js');
+
 module.exports = {
-  props : {
-    location : Object,
-  },
+  mixins : [mixins, ],
   data : function(){
     return {
     };
-  }
+  },
 }
 </script>

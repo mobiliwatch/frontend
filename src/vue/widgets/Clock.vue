@@ -1,13 +1,14 @@
 <template>
-  <div class="location">
+  <div class="time">
     Time is {{ date }}
   </div>
 </template>
 
 <script>
+var mixins = require('./mixins.js');
+
 module.exports = {
-  props : {
-  },
+  mixins : [mixins, ],
   data : function(){
     return {
       date : new Date(),
@@ -22,5 +23,5 @@ module.exports = {
       this.$set(this, 'date', new Date());
     }
   },
-}
+};
 </script>
