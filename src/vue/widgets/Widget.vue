@@ -4,15 +4,15 @@
       <div class="content">
 
         <!-- Debug Tools -->
-        <div class="tools is-12">
+        <div class="tools is-12" v-if="debug">
           <span class="tag is-success">Version {{ widget.revision }}</span>
 
           <span class="tag is-dark" v-if="!widget.updated">Pas de mises à jour</span>
           <span class="tag is-info" v-if="widget.updated">Mis à jour {{ widget.updated }}</span>
 
-          <button class="button is-small" v-on:click="toggle_debug()">Debug</button>
+          <button class="button is-small" v-on:click="toggle_details()">Widget Details</button>
 
-          <div v-if="debug">
+          <div v-if="show_details">
             <p class="title" v-if="widget">{{ widget.type }}</p>
             <p class="subtitle">{{ widget.id }}</p>
             <pre>{{ widget }}</pre>
@@ -52,12 +52,17 @@ module.exports = {
   },
   data : function(){
     return {
-      debug : false,
+      show_details : false,
     };
   },
   methods : {
-    toggle_debug : function(){
-      this.$set(this, 'debug', !this.debug);
+    toggle_details : function(){
+      this.$set(this, 'show_details', !this.show_details);
+    },
+  },
+  computed : {
+    debug : function(){
+      return this.$store.state.debug;
     },
   },
 };

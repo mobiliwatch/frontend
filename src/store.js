@@ -6,6 +6,7 @@ module.exports = new Vuex.Store({
   state: {
     updates : [],
     widgets : {},
+    debug : false,
   },
   mutations: {
     add_update : function(state, payload){
@@ -43,6 +44,9 @@ module.exports = new Vuex.Store({
     add_widget : function(state, widget){
       // Store an initial widget declaration in store
       state.widgets[widget.id] = widget;
+    },
+    toggle_debug : function(state){
+      state.debug = !state.debug;
     },
   }
 })

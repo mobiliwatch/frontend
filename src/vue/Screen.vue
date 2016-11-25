@@ -14,6 +14,7 @@ module.exports = {
       screen : null,
       error : null,
       ws : null,
+      debug : false,
     }
   },
   mounted : function(){
@@ -62,6 +63,11 @@ module.exports = {
       else
         console.warn('Unsupported Websocket message', msg);
     },
+
+    // Toggle debug mode
+    toggle_debug : function(){
+      this.$store.commit('toggle_debug');
+    },
   },
   computed: {
     pannelClass: function () {
@@ -72,6 +78,9 @@ module.exports = {
       var height = window.innerHeight;
       var navHeight = 60; // hackish
       return (height - navHeight) + 'px';
+    },
+    debug : function(){
+      return this.$store.state.debug;
     },
   }
 };
@@ -89,7 +98,13 @@ module.exports = {
       </div>
       <div class="nav-right">
         <div class="nav-item">
-          <router-link class="button" to="/">Home</router-link>
+          <router-link class="button is-success" to="/">Home</router-link>
+        </div>
+        <div class="nav-item">
+          <button class="button" v-on:click="toggle_debug" :class="{'is-dark' : debug}">
+            <span v-if="debug">Debug ON</span>
+            <span v-if="!debug">Debug OFF</span>
+          </button>
         </div>
         <div class="nav-item">
           <toggle-button
@@ -102,8 +117,7 @@ module.exports = {
     </nav>
 
     <div class="notification is-info" v-if="!error && !screen">
-      <p v-if="slug">Chargement...</p>
-      <p v-if="!slug">Veuillez sélectionner un écran...</p>
+      Chargement...
     </div>
     <div class="notification is-danger" v-if="error">
       <h4>Erreur !</h4>
