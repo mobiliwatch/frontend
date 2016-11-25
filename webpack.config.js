@@ -48,7 +48,7 @@ module.exports = {
       },
       {
         // Support fonts
-        test: /\.(eot|svg|ttf|woff|woff2)$/,
+        test: /\.(eot|svg|ttf|woff|woff2)/,
         loader: 'file?name=fonts/[name].[ext]'
       },
       {

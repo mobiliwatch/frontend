@@ -2,14 +2,6 @@
 var toggleButton = require('./ToggleButton.vue');
 var Group = require('./widgets/Group.vue');
 
-// Helpers
-function getUrlParameter(name) {
-  name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-  var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-  var results = regex.exec(location.search);
-  return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-};
-
 module.exports = {
   components: {
     'toggle-button': toggleButton,
@@ -25,10 +17,7 @@ module.exports = {
     }
   },
   mounted : function(){
-    // TODO: manage a list of screens
-    this.$set(this, 'slug', getUrlParameter('screen'));
-    if(this.slug)
-      this.load_screen(this.slug);
+    this.load_screen(this.$route.params.slug);
   },
   methods : {
     // Load a screen data and strore them
@@ -99,6 +88,9 @@ module.exports = {
         </div>
       </div>
       <div class="nav-right">
+        <div class="nav-item">
+          <router-link class="button" to="/">Home</router-link>
+        </div>
         <div class="nav-item">
           <toggle-button
             option1="dark"

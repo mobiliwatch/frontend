@@ -30,9 +30,11 @@
   "dependencies": {
     "bootstrap": "^3.3.7",
     "bulma": "^0.2.3",
+    "font-awesome": "^4.7.0",
     "lodash": "^4.17.2",
     "vue": "^2.0.7",
     "vue-resource": "^1.0.3",
+    "vue-router": "^2.0.3",
     "vuex": "^2.0.0"
   }
 }
