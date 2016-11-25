@@ -32,7 +32,10 @@ module.exports = new Vuex.Store({
       var new_widget = _.merge(widget, payload.update);
 
       // Add meta data
-      new_widget['updated'] = new Date();
+      new_widget['updated'] = {
+          server : payload.time,
+          local : new Date().getTime() / 1000,
+      };
       new_widget['revision'] = widget['revision'] + 1;
 
 			widgets[widget_id] = new_widget;

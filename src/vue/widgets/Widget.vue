@@ -8,7 +8,8 @@
           <span class="tag is-success">Version {{ widget.revision }}</span>
 
           <span class="tag is-dark" v-if="!widget.updated">Pas de mises à jour</span>
-          <span class="tag is-info" v-if="widget.updated">Mis à jour {{ widget.updated }}</span>
+          <span class="tag is-info" v-if="widget.updated">Local time {{ widget.updated.local }}</span>
+          <span class="tag is-info" v-if="widget.updated">Server time {{ widget.updated.server }}</span>
 
           <button class="button is-small" v-on:click="toggle_details()">Widget Details</button>
 
