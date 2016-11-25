@@ -1,6 +1,17 @@
 <template>
   <div>
-    Select a screen...
+    <section class="hero is-small is-success is-bold">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">
+            <span class="icon">
+              <span class="fa fa-bars"></span>
+            </span>
+            Sélectionnez un écran
+          </h1>
+        </div>
+      </div>
+    </section>
 
     <section class="hero is-medium is-bold" :class="{'is-info': i % 2 == 0, 'is-dark': i % 2 == 1}" v-for="(screen, i) in screens">
       <div class="hero-body">
