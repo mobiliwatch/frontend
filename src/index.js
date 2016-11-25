@@ -11,6 +11,7 @@ var Home = require('vue/Home.vue');
 var Screen = require('vue/Screen.vue');
 
 // Css
+require('weather-icons/css/weather-icons.css');
 require('font-awesome/css/font-awesome.css');
 require('bulma/css/bulma.css');
 require('css/app.css');

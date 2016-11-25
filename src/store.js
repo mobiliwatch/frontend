@@ -46,6 +46,7 @@ module.exports = new Vuex.Store({
     },
     add_widget : function(state, widget){
       // Store an initial widget declaration in store
+      widget['revision'] = 0;
       state.widgets[widget.id] = widget;
     },
     toggle_debug : function(state){
