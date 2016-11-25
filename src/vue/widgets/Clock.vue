@@ -1,7 +1,28 @@
 <template>
-  <div class="time">
-    Time is {{ date }}
+<section class="hero">
+  <div class="hero-body">
+    <div class="container">
+      <div class="clock has-text-centered">
+        <p class="time">
+          <span class="hours">
+            {{ hours }}
+          </span>
+          <span class="separator">:</span>
+          <span class="minutes">
+            {{ minutes }}
+          </span>
+          <span class="separator">:</span>
+          <span class="seconds">
+            {{ seconds}}
+          </span>
+        </p>
+        <p class="date">
+          {{ day }} {{ date }} {{ month }} {{ year }}
+        </p>
+      </div>
+    </div>
   </div>
+</section>
 </template>
 
 <script>
@@ -11,17 +32,61 @@ module.exports = {
   mixins : [mixins, ],
   data : function(){
     return {
-      date : new Date(),
+      rawDate : new Date(),
     };
   },
   mounted : function(){
     // Refresh clock every seconds
-    setInterval(this.updateDateTime, 1000);
+    setInterval(this.updateDateTime, 500);
   },
   methods: {
     updateDateTime : function(){
-      this.$set(this, 'date', new Date());
+      this.$set(this, 'rawDate', new Date());
+    },
+    intFormat : function(x){
+      return x < 10 ? '0' + x : x;
     }
+  },
+  computed : {
+    hours : function(){
+      return this.intFormat(this.rawDate.getHours());
+    },
+    minutes : function(){
+      return this.intFormat(this.rawDate.getMinutes());
+    },
+    seconds : function(){
+      return this.intFormat(this.rawDate.getSeconds());
+    },
+    day : function(){
+      var days = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
+      return days[this.rawDate.getDay()];
+    },
+    date : function(){
+      return this.rawDate.getDate();
+    },
+    month : function(){
+      var months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+      return months[this.rawDate.getMonth()];
+    },
+    year : function(){
+      return this.rawDate.getFullYear();
+    },
   },
 };
 </script>
+
+<style lang="sass" scoped>
+.clock {
+  .time {
+    font-size: 4em;
+  } 
+  .date {
+    font-size: 2em;
+    color: #888;
+  } 
+
+  .separator {
+    color: #CCC;
+  }
+}
+</style>

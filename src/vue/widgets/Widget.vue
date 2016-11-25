@@ -1,6 +1,6 @@
 <template>
   <div class="tile is-parent">
-    <article class="tile is-child notification is-info">
+    <article class="tile is-child box">
       <div class="content">
 
         <!-- Debug Tools -->
