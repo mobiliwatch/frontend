@@ -34,6 +34,12 @@
         </span>
         <span>{{ widget.humidity }}% d'humidité</span>
       </div>
+      <div>
+        <span class="icon is-medium">
+          <span class="fa fa-clock-o"></span>
+        </span>
+        <span>Observé il y'a {{ widget.observed|timesince }}h</span>
+      </div>
     </div>
   </div>
 </template>
@@ -53,6 +59,11 @@ module.exports = {
       var hours = "0" + date.getHours();
       var minutes = "0" + date.getMinutes();
       return hours.substr(-2) + ':' + minutes.substr(-2);
+    },
+    timesince : function(timestamp){
+      // Difference since time, in hours
+      var diff = new Date() - new Date(timestamp * 1000);
+      return Math.ceil(diff / (3600*1000));
     },
   },
   computed : {
