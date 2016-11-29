@@ -68,3 +68,24 @@ module.exports = {
   },
 };
 </script>
+
+<style lang="sass">
+
+/* Dark mode */
+div#wrapper.dark {
+  .hero {
+    background-color: transparent !important;
+  } 
+
+  .box {
+    background-color: transparent !important;
+    border: 1px solid #222;
+  } 
+
+  .box, div.content {
+    *, & {
+      color: white !important;
+    }
+  }
+}
+</style>

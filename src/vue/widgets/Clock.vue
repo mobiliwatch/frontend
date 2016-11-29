@@ -89,4 +89,14 @@ module.exports = {
     color: #CCC;
   }
 }
+
+div#wrapper.dark {
+  .date {
+    color: #EEE;
+  } 
+
+  .separator {
+    color: #AAA;
+  }
+}
 </style>

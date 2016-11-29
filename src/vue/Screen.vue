@@ -87,26 +87,26 @@ module.exports = {
 </script>
 
 <template>
-  <div id="wrapper" class="fullscreen" v-bind:class="{ dark: cssSelector == 'dark' }">
+  <div id="wrapper" class="fullscreen" v-bind:class="cssSelector">
 
-    <nav class="nav">
-      <div class="nav-left">
-        <div class="nav-item">
+    <nav class="level">
+      <div class="level-left">
+        <div class="level-item">
           <p class="title" v-if="screen">{{ screen.name }}</p>
           <p class="heading">Mobili.Watch</p>
         </div>
       </div>
-      <div class="nav-right">
-        <div class="nav-item">
+      <div class="level-right">
+        <div class="level-item">
           <router-link class="button is-success" to="/">Home</router-link>
         </div>
-        <div class="nav-item">
+        <div class="level-item">
           <button class="button" v-on:click="toggle_debug" :class="{'is-dark' : debug}">
             <span v-if="debug">Debug ON</span>
             <span v-if="!debug">Debug OFF</span>
           </button>
         </div>
-        <div class="nav-item">
+        <div class="level-item">
           <toggle-button
             option1="dark"
             option2="light"
@@ -130,13 +130,24 @@ module.exports = {
   </div>
 </template>
 
-<style>
-.nav {
-  background: inherit !important;
+<style lang="sass">
+nav {
+  padding: 0 5px; 
+  margin-bottom: 4px !important;
 }
 
 div.tile.is-ancestor {
   padding-left: 10px;
   padding-right: 10px;
+}
+
+/* Dark mode */
+div#wrapper.dark {
+
+  nav {
+    .title {
+      color: white;
+    }
+  }
 }
 </style>
