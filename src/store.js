@@ -33,8 +33,8 @@ module.exports = new Vuex.Store({
 
       // Add meta data
       new_widget['updated'] = {
-          server : payload.time,
-          local : new Date().getTime() / 1000,
+          server : payload.time * 1000,
+          local : new Date().getTime(),
       };
       new_widget['revision'] = widget['revision'] + 1;
 
@@ -54,4 +54,3 @@ module.exports = new Vuex.Store({
     },
   }
 })
-

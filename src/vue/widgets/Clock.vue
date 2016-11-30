@@ -40,14 +40,17 @@ module.exports = {
     setInterval(this.updateDateTime, 500);
   },
   methods: {
-    updateDateTime : function(){
-      this.$set(this, 'rawDate', new Date());
+    updateDateTime : function() {
+      this.$set(this, 'rawDate', new Date(new Date().getTime() - this.offset));
     },
     intFormat : function(x){
       return x < 10 ? '0' + x : x;
     }
   },
   computed : {
+    offset : function(){
+      return this.widget.updated.local - this.widget.updated.server;
+    },
     hours : function(){
       return this.intFormat(this.rawDate.getHours());
     },
@@ -79,11 +82,11 @@ module.exports = {
 .clock {
   .time {
     font-size: 4em;
-  } 
+  }
   .date {
     font-size: 2em;
     color: #888;
-  } 
+  }
 
   .separator {
     color: #CCC;
