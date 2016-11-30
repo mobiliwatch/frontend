@@ -23,6 +23,7 @@ const store = require('./store.js');
 const routes = [
   { name: 'home', path: '/', component: Home},
   { name: 'screen', path: '/screen/:slug', component: Screen},
+  { name: 'share', path: '/share/:slug/:token', component: Screen},
 ];
 
 // Run our main app

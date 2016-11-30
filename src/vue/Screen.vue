@@ -19,14 +19,18 @@ module.exports = {
     }
   },
   mounted : function(){
-    this.load_screen(this.$route.params.slug);
+    this.load_screen(this.$route.params.slug, this.$route.params.token);
   },
   methods : {
     // Load a screen data and strore them
-    load_screen : function(slug){
+    load_screen : function(slug, token){
       // TODO: use global urls
       var api_url = API_URL + '/screen/' + slug + '/'; 
       var ws_url = WS_URL + '/screen/' + slug + '/'; 
+      if(token){
+        api_url += 'shared/' + token + '/';
+        ws_url += 'shared/' + token + '/';
+      }
       var options = {
         credentials : true,
       };
