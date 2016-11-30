@@ -1,4 +1,5 @@
 <script>
+var ReconnectingWebSocket = require('ReconnectingWebSocket');
 var toggleButton = require('./ToggleButton.vue');
 var Group = require('./widgets/Group.vue');
 
@@ -40,7 +41,7 @@ module.exports = {
 
         // Setup Websocket
         var that = this;
-        var ws = new WebSocket(ws_url);
+        var ws = new ReconnectingWebSocket(ws_url);
         ws.onopen = function() {
           that.$set(that, 'ws', ws);
           that.ws.onmessage = that.ws_received;

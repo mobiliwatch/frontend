@@ -28,6 +28,7 @@
     "webpack-dev-server": "^1.16.2"
   },
   "dependencies": {
+    "ReconnectingWebSocket": "github:joewalnes/reconnecting-websocket",
     "bootstrap": "^3.3.7",
     "bulma": "^0.2.3",
     "font-awesome": "^4.7.0",
