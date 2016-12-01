@@ -1,10 +1,8 @@
 <template>
   <div class="location">
-    <p>server time: {{ widget.updated ? new Date(widget.updated.server).toString() : '' }} {{ widget.updated ? widget.updated.server : '' }}</p>
-    <p>local time:  {{ widget.updated ? new Date(widget.updated.local).toString()  : '' }} {{ widget.updated ? widget.updated.local  : '' }}</p>
-    <div v-for="line_stop in widget.location.line_stops" v-if="widget.revision > 0">
+    <div v-for="line_stop in widget.location.line_stops" v-if="widget.revision > 0" :key="line_stop.id">
       {{ line_stop.line.mode }} {{ line_stop.line.name }} direction {{ line_stop.direction.name }}
-      <Timeline :times="line_stop.times" :widgetId="widgetId" />
+      <Timeline :times="line_stop.times" :mode="line_stop.line.mode" :timeLength="60 * 60 * 1000" :widgetId="widgetId" />
     </div>
   </div>
 </template>

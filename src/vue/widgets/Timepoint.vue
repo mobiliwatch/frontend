@@ -1,5 +1,10 @@
 <script>
 var mixins = require('./mixins.js');
+// icons from http://www.flaticon.com/packs/vehicles : free license with attribution
+require("./fonts/bus.svg");
+require("./fonts/car.svg");
+require("./fonts/train.svg");
+require("./fonts/tram.svg");
 
 //
 // Timepoint
@@ -10,8 +15,10 @@ var mixins = require('./mixins.js');
 module.exports = {
   mixins : [mixins, ],
   props: {
-    'time':      Number,
-    'reference': String,
+    'time':       Number,
+    'timeLength': Number,
+    'timeRatio':  Number,
+    'mode':       String,
   },
   data: function () {
     return {
@@ -28,44 +35,43 @@ module.exports = {
     localTime: function() {
       return this.time + this.offset;
     },
-/*    tpStyle: function () {
-      return { right: this.position + 'px' }
-    }*/
+    tpStyle: function () {
+      if (this.delay > this.timeLength)
+        return { display: 'none' }
+      var position = Math.max(this.delay, 0) * this.timeRatio;
+      var style = { right: position + 'px' };
+      if (this.delay < 5 * 60 * 1000)
+        style.color = 'red'
+      return style;
+    }
   },
   methods: {
     updateDelay: function () {
       this.$set(this, 'delay', this.localTime - new Date().getTime());
     },
-    formatDelay: function (ms) {
-      var d = Math.floor(ms / 1000)
-      if (d < 60)
-        return d + ' sec';
-      return Math.floor(d / 60) + ' min ' + (d % 60) + ' sec';
+    formatTime: function (timestamp) {
+      var date = new Date(timestamp);
+      return date.getHours() + ':' + ('0' + date.getMinutes()).substr(date.getMinutes() > 9);
     },
   }
 }
 </script>
 
 <template>
-  <div>
-    {{ reference }} {{ new Date(time).toTimeString() }} dans {{ formatDelay(delay) }}
+  <div class="timepoint" :style="tpStyle">
+    <div class="timesign">
+      {{ formatTime(time) }}
+      <img :src="'./fonts/' + this.mode + '.svg'" height="40" width="40" />
+    </div>
   </div>
 </template>
-/*
-<div class="timepoint" v-bind:style="tpStyle">
-  <div class="timesign">
-    <p>{{ time }}</p>
-    <p>bus</p>
-  </div>
-</div>
-*/
+
 <style>
 
   .timepoint {
     position: absolute;
     height: 14px;
     width: 14px;
-    right: 100px;
     bottom: -2px;
     border-radius: 14px;
     border-style: solid;
@@ -76,13 +82,10 @@ module.exports = {
 
   .timesign {
     position: absolute;
-    right: -20px;
-    bottom: 15px;
-    border-radius: 2px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: black;
-    background-color: #ddd;
+    text-align: center;
+    line-height: 100%;
+    right: -10px;
+    bottom: 7px;
   }
 
 </style>

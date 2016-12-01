@@ -1,6 +1,7 @@
 <script>
 var mixins = require('./mixins.js');
 var Timepoint = require('./Timepoint.vue');
+require("./fonts/stop.svg");
 
 //
 // Timeline
@@ -14,11 +15,18 @@ module.exports = {
     'Timepoint': Timepoint,
   },
   props: {
-    'times': Array,
+    'times':      Array,
+    'timeLength': Number,
+    'mode':       String,
   },
   data: function () {
     return {
+      timeRatio: 0,
     }
+  },
+  mounted: function() {
+    // 14 is the Timepoint width
+    this.timeRatio = (this.$el.offsetWidth - 14)/ this.timeLength;
   },
   computed: {
   },
@@ -28,42 +36,22 @@ module.exports = {
 </script>
 
 <template>
-  <div>
-    <p>
-      {{ times.length }} times:
-      <span v-for="t in times">
-        {{ t.reference }}
-      </span>
-    </p>
-    <ul v-if="times.length > 0">
-      <li v-for="t in times"> <!-- :key="t.reference" -->
-        <Timepoint :time="t.time * 1000" :reference="t.reference" :widgetId="widgetId" />
-      </li>
-    </ul>
-    <p v-else>
-      Pas d'horaires.
-    </p>
+  <div class="timeline">
+    <div class="timefinishing">
+      <img src="./fonts/stop.svg" heigth="32" width="32"/>
+    </div>
+    <Timepoint v-for="t in times" :time="t.time * 1000" :timeLength="timeLength" :timeRatio="timeRatio" :mode="mode" :key="t.reference" :widgetId="widgetId" />
   </div>
 </template>
-
-/*
-<div class="timeline">
-  <div class="timefinishing">
-    F
-  </div>
-  <timepoint v-for="tp in timepoints" :hour="tp.hour" :position="tp.position">
-  </timepoint>
-</div>
-*/
 
 <style>
 
   .timeline {
     position: relative;
     display: inline-block;
-    width: 100%;
+    width: 95%;
     height: 10px;
-    margin: 50px 10px;
+    margin: 50px 10px 10px 10px;
     background-color: #2196F3;
     border-radius: 10px;
   }
