@@ -29,12 +29,20 @@ module.exports = new Vuex.Store({
 			var widgets = _.clone(state.widgets);
 
       // Merge items from payload update
-      var new_widget = _.merge(widget, payload.update);
+      var new_widget;
+      if (widget.type == 'LocationWidget') {
+        // LocationWidget case: partial data update
+        new_widget = _.clone(widget);
+        new_widget.location = payload.update.location;
+      } else {
+        // Common case: full data update
+        new_widget = _.merge(widget, payload.update);
+      }
 
       // Add meta data
       new_widget['updated'] = {
-          server : payload.time,
-          local : new Date().getTime() / 1000,
+          server : payload.time * 1000,
+          local : new Date().getTime(),
       };
       new_widget['revision'] = widget['revision'] + 1;
 
@@ -54,4 +62,3 @@ module.exports = new Vuex.Store({
     },
   }
 })
-

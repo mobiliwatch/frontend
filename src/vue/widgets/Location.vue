@@ -1,24 +1,21 @@
 <template>
   <div class="location">
-    <div v-for="line_stop in widget.location.line_stops" v-if="widget.revision > 0">
+    <div v-for="line_stop in widget.location.line_stops" v-if="widget.revision > 0" :key="line_stop.id">
       {{ line_stop.line.mode }} {{ line_stop.line.name }} direction {{ line_stop.direction.name }}
-      <ul v-if="line_stop.times.length > 0">
-        <li v-for="t in line_stop.times" >
-          {{ t }}
-        <li>
-      </ul>
-      <p v-if="!line_stop.times.length">
-        Pas d'horaires.
-      </p>
+      <Timeline :times="line_stop.times" :mode="line_stop.line.mode" :timeLength="60 * 60 * 1000" :widgetId="widgetId" />
     </div>
   </div>
 </template>
 
 <script>
 var mixins = require('./mixins.js');
+var Timeline = require('./Timeline.vue')
 
 module.exports = {
   mixins : [mixins, ],
+  components : {
+    'Timeline': Timeline
+  },
   data : function(){
     return {
     };
