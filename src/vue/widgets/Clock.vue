@@ -11,10 +11,12 @@
           <span class="minutes">
             {{ minutes }}
           </span>
+          <!--
           <span class="separator">:</span>
           <span class="seconds">
             {{ seconds}}
           </span>
+          -->
         </p>
         <p class="date">
           {{ day }} {{ date }} {{ month }} {{ year }}
@@ -96,7 +98,7 @@ module.exports = {
 div#wrapper.dark {
   .date {
     color: #EEE;
-  } 
+  }
 
   .separator {
     color: #AAA;

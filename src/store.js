@@ -31,11 +31,18 @@ module.exports = new Vuex.Store({
       // Merge items from payload update
       var new_widget;
       if (widget.type == 'LocationWidget') {
-        // LocationWidget case: partial data update
+        // LocationWidget case: detailed merge
         new_widget = _.clone(widget);
+        /*
+        var line_stops = payload.update.location.line_stops;
+        for (var line_stop in line_stops) {
+          var line_stop = line_stops
+          console.log(line_stop.id);
+        }
+        */
         new_widget.location = payload.update.location;
       } else {
-        // Common case: full data update
+        // Common case: basic merge
         new_widget = _.merge(widget, payload.update);
       }
 
