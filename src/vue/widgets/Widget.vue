@@ -71,6 +71,10 @@ module.exports = {
 
 <style lang="sass">
 
+div.content {
+  height: 100%; /* propagate height */
+}
+
 /* Dark mode */
 div#wrapper.dark {
   .hero {

@@ -14,7 +14,8 @@ module.exports = {
     'Timeline': Timeline
   },
   props: {
-    'line_stop':    Object,
+    'height' : Number,
+    'line_stop': Object,
   },
   data : function(){
     return {
@@ -106,7 +107,7 @@ module.exports = {
 </script>
 
 <template>
-  <div class="transportline">
+  <div class="transportline" :style="{height : height + 'px'}">
     <div class="linecontainer">
       <div class="linetitle"
         :style="{
@@ -136,7 +137,10 @@ module.exports = {
   </div>
 </template>
 
-<style>
+<style lang="sass" scoped>
+div.transportline {
+  min-height: 200px;  /* Do NOT specify height here */
+}
 
 .linecontainer {
 }
