@@ -46,8 +46,7 @@ module.exports = {
       var tl = {
         duration:  duration,
 //      finishing: '<img src="./fonts/stop.svg" heigth="32" width="32"/>',
-//      finishing: '<span style="font-size: 3em;" class="fa fa-flag-checkered"></span>',
-        finishing: this.line_stop.stop.name,
+        finishing: '<span style="font-size: 3em;" class="fa fa-flag-checkered"></span>',
         style: this.styleGradient(limit_time, walking_time, duration),
         cb_point:  function(point, delay) {
           if (delay < limit_time) {
@@ -58,16 +57,17 @@ module.exports = {
           }
         },
         cb_points: function(points) {
+          var delay = undefined;
           for (var i = 0; i < points.length; i++) {
             var point = points[i];
             if (point.delay > limit_time) {
               point.class.timesignTarget = true;
-              var delay = Math.max(0, point.delay - walking_time);
-              that.$set(that, 'delay', delay);
+              delay = Math.max(0, point.delay - walking_time);
               break;
             }
             point.class.timesignTarget = false;
           }
+          that.$set(that, 'delay', delay);
         },
         points:    [],
       };
@@ -93,7 +93,7 @@ module.exports = {
     },
     styleGradient: function(t1, t2, ref) {
       const colorBefore = '#ddd',
-            colorBetween = 'red',
+            colorBetween = '#ff3860', /* Bulma's $red*/
             colorAfter = '#aaa';
       var halftrans = 0.005;
       return 'background: linear-gradient(to left, ' + colorBefore + ', '
@@ -107,70 +107,65 @@ module.exports = {
 </script>
 
 <template>
-  <div class="transportline" :style="{height : height + 'px'}">
-    <div class="linecontainer">
-      <div class="linetitle"
-        :style="{
-          color:           '#' + line_stop.line.color_front,
-          backgroundColor: '#' + line_stop.line.color_back }">
+  <div :style="{height : height + 'px'}">
+    <div class="columns">
+      <div class="column is-2 notification has-text-centered font-300"
+          :style="{
+            color:           '#' + line_stop.line.color_front,
+            backgroundColor: '#' + line_stop.line.color_back }">
         {{ line_stop.line.mode }} {{ line_stop.line.name }}
       </div>
-      <div class="timeleft">
+      <div class="column is-7 font-150">
+        station   <span class="bold">{{ line_stop.stop.name }}</span><br>
+        direction <span class="bold">{{ line_stop.direction.name }}</span>
+      </div>
+      <div class="column is-3 notification has-text-centered theme-bgcolor-1">
         <template v-if="delay > 0">
-          <div class="leavemsg">partez dans</div>
-          <div class="leavedelay" v-html="htmlDelay"></div>
+          <span class="font-150">partez dans</span><br>
+          <span class="font-300" v-html="htmlDelay"></span>
         </template>
         <template v-if="delay == 0">
-          <div class="leavemsg">partez</div>
-          <div class="leavedelay now">maintenant</div>
+          <span class="font-150">partez</span><br>
+          <span class="font-300 now">maintenant</span>
         </template>
         <template v-if="typeof delay == 'undefined'">
-          <div class="leavemsg"> </div>
-          <div class="leavedelay"> </div>
+          <span class="font-200">aucun</span><br>
+          <span class="font-200">passage</span>
         </template>
       </div>
-      <div class="linedirection">
-        direction {{ line_stop.direction.name }}
+    </div>
+    <div class="columns">
+      <div class="column is-fullwidth">
+        <Timeline :tline="tline" />
       </div>
     </div>
-    <Timeline :tline="tline" />
   </div>
 </template>
 
-<style lang="sass" scoped>
-div.transportline {
-  min-height: 200px;  /* Do NOT specify height here */
+<style>
+
+.theme-bgcolor-1 {
+  background-color: #00d1b2; /* Bulma's $turquoise */
 }
 
-.linecontainer {
-}
-
-.linetitle {
-  text-align: center;
+.font-300 {
   font-size: 3em;
-  width: 180px;
-  float: left;
-  color: black;
-  background-color: #FCCD51; /* Transisere default color */
-  border-radius: 5px;
 }
 
-.timeleft {
-  float: right;
-  width: 300px;
-  text-align: center;
-  color: black;
-  background-color: #00d1b2;
-  border-radius: 5px;
+.font-250 {
+  font-size: 2.5em;
 }
 
-.leavemsg {
+.font-200 {
+  font-size: 2em;
+}
+
+.font-150 {
   font-size: 1.5em;
-  line-height: 120%;
 }
 
-.leavedelay {
-  font-size: 4em;
+.bold {
+  font-weight: bold;
 }
 
 @keyframes now {
@@ -178,7 +173,7 @@ div.transportline {
   to   { color: #00d1b2; }
 }
 
-.leavedelay.now {
+.now {
   animation-name: now;
   animation-duration: 0.5s;
   animation-direction: alternate;
@@ -186,19 +181,12 @@ div.transportline {
   animation-iteration-count: infinite;
 }
 
-.linedirection {
-  font-size: 2em;
-  margin-left:  180px;
-  margin-right: 300px;
-  padding: 0px 10px;
-}
-
 .timefinishing {
   position: absolute;
-  font-size: 2em;
-  text-align: left;
-  right: -100px;
-  bottom: 20px;
+  font-size: 1em;
+  color: #23d160; /* Bulma's $green */
+  right: -40px;
+  bottom: 10px;
 }
 
 .timesign {
@@ -215,8 +203,8 @@ div.transportline {
 }
 
 .timesignWarning {
-  color: red;
-  background-color: red !important;
+  color:            #ff3860;            /* Bulma's $red*/
+  background-color: #ff3860 !important; /* Bulma's $red*/
 }
 
 .timesignMissed {

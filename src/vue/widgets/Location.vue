@@ -41,7 +41,7 @@ module.exports = {
         page_id = this.current_page + 1;
 
       // Keep inside bounds
-      page_id = page_id % this.nb_pages; 
+      page_id = page_id % this.nb_pages;
 
       // Save new page
       this.$set(this, 'current_page', page_id);
@@ -89,7 +89,7 @@ module.exports = {
 <style scoped lang="sass">
 .location {
   /* propagate height */
-  height: 100%; 
+  height: 100%;
 
   .pagination {
     height: 6%;

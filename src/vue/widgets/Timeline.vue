@@ -16,18 +16,10 @@ module.exports = {
   },
   data: function () {
     return {
-      timelineWidth: 0,
-      points:        [],
+      points: [],
     }
   },
-  computed: {
-    'timeRatio': function() {
-      // 14 is the Timepoint width
-      return (this.timelineWidth - 14) / this.tline.duration;
-    },
-  },
   mounted: function() {
-    this.timelineWidth = this.$el.offsetWidth;
     setInterval(this.updatePoints, 1000);
   },
   methods: {
@@ -38,13 +30,13 @@ module.exports = {
         var tpoint = this.tline.points[i];
         var delay = tpoint.time - currentTime;
         if (delay <= this.tline.duration) {
-          var position = Math.floor(Math.max(delay, 0) * this.timeRatio);
+          var translation = (1.0 - Math.max(delay, 0) / this.tline.duration) * 100.0;
           var point = {
-            reference: tpoint.reference,
-            delay:     delay,
-            position:  position,
-            html:      tpoint.html,
-            class:     {}
+            reference:   tpoint.reference,
+            delay:       delay,
+            translation: translation,
+            html:        tpoint.html,
+            class:       {}
           };
           if (this.tline.cb_point) {
             this.tline.cb_point(point, delay);
@@ -62,23 +54,46 @@ module.exports = {
 </script>
 
 <template>
-  <div class="timeline" :style="this.tline.style">
-    <div class="timefinishing" v-html="tline.finishing">
+<div>
+  <div class="timeline-padding">
+    <div class="timeline" :style="this.tline.style">
+      <div class="timeline-reducer">
+        <Timepoint v-for="point in points" :point="point" :key="point.reference" />
+      </div>
+      <div class="timefinishing" v-html="tline.finishing">
+      </div>
     </div>
-    <Timepoint v-for="point in points" :point="point" :key="point.reference" />
   </div>
+</div>
 </template>
 
 <style>
 
-  .timeline {
+  .timeline-padding {
     position: relative;
-    display: inline-block;
-    width: 80%;
+    width: 100%;
+    height: 110px;
+    box-sizing: border-box;
+    border-top: 50px solid rgba(0,0,0,0);
+    border-bottom: 50px solid rgba(0,0,0,0);
+    border-left: 50px solid rgba(0,0,0,0);
+    border-right: 50px solid rgba(0,0,0,0);
+  }
+
+  .timeline {
+    position: absolute;
+    width: 100%;
     height: 10px;
-    margin: 60px 10px;
-    background: #aaa;
+    background-color: #aaa;
     border-radius: 10px;
+  }
+
+  .timeline-reducer {
+    position: absolute;
+    width: 100%;
+    height: 10px;
+    box-sizing: border-box;
+    border-right: 10px solid rgba(0,0,0,0);
   }
 
 </style>
