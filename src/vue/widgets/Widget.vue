@@ -27,6 +27,7 @@
           <Clock v-if="widget.type == 'ClockWidget'" :widgetId="widgetId" />
           <Weather v-if="widget.type == 'WeatherWidget'" :widgetId="widgetId" />
           <Location v-if="widget.type == 'LocationWidget'" :widgetId="widgetId" />
+          <Disruption v-if="widget.type == 'DisruptionWidget'" :widgetId="widgetId" />
         </div>
       </div>
     </article>
@@ -40,6 +41,7 @@ var Note = require('./Note.vue');
 var Clock = require('./Clock.vue');
 var Weather = require('./Weather.vue');
 var Location = require('./Location.vue');
+var Disruption = require('./Disruption.vue');
 var mixins = require('./mixins.js');
 
 // Manual mixin to support computed
@@ -50,6 +52,7 @@ module.exports = {
     'Clock' : Clock,
     'Weather' : Weather,
     'Location' : Location,
+    'Disruption' : Disruption,
   },
   data : function(){
     return {
