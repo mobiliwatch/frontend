@@ -23,6 +23,24 @@ module.exports = {
     };
   },
   computed: {
+    disruption: function() {
+      if (this.line_stop.direction.disruptions != null)
+        return this.line_stop.direction.disruptions[0];
+      return null;
+      return {
+          "type": {
+            "Name": "Commercial",
+            "Id": 1,
+            "Code": "1"
+          },
+          "id": 42413,
+          "level": null,
+          "description": "<div><div>Pour No&#235;l des Trams&#160;en plus ! <br>Les samedis 10 et&#160;17 d&#233;cembre 2016&#160;<br>de 13h &#224; 19h</div>\r\n<div>&#160;</div>\r\n<div>A l'occasion des f&#234;tes de fin d'ann&#233;e les trams circuleront le samedi toutes les 7 minutes environ.</div>\r\n<div>&#160;</div>\r\n<div>&#160;</div></div>",
+          "name": "TAG L.C, E : trams en plus les samedis 10 et 17 décembre",
+          "start": 1480957440,
+          "end": 1481997840
+        };
+    },
     htmlDelay: function() {
       if (this.delay) {
         const separator = '<span style="font-size:0.5em; position: relative; bottom:0.25em;"> min </span>';
@@ -109,21 +127,24 @@ module.exports = {
         + colorBetween + ' ' + (t2 / ref - halftrans) * 100 + '%, '
         + colorAfter   + ' ' + (t2 / ref + halftrans) * 100 + '%);';
     },
+    textContent: function(html) {
+      var newDiv = document.createElement("div");
+      newDiv.innerHTML = html;
+      return newDiv.textContent;
+    },
   },
 }
 </script>
 
 <template>
 
-  <!-- div :style="{height : height + 'px'}" -->
-
-  <div :style="{width: '1000px'}">
+  <div :style="{height : height + 'px'}">
     <div class="columns">
-      <div class="column is-2 notification has-text-centered font-300"
+      <div class="column is-2 notification has-text-centered no-wrap"
           :style="{
             color:           '#' + line_stop.line.color_front,
             backgroundColor: '#' + line_stop.line.color_back }">
-        {{ line_stop.line.mode }} {{ line_stop.line.name }}
+        <span class="font-200" style="position: relative; bottom:0.15em;">{{ line_stop.line.mode }}</span><span class="font-300 bold"> {{ line_stop.line.name }}</span>
       </div>
       <div class="column is-7 font-150">
         station   <span class="bold">{{ line_stop.stop.name }}</span> ({{ formatDistance(line_stop.stop.distance) }})<br>
@@ -132,15 +153,15 @@ module.exports = {
       <div class="column is-3 notification has-text-centered theme-bgcolor-1">
         <template v-if="delay > 0">
           <span class="font-150">partez dans</span><br>
-          <span class="font-300" v-html="htmlDelay"></span>
+          <span class="font-300 bold" v-html="htmlDelay"></span>
         </template>
         <template v-if="delay == 0">
           <span class="font-150">partez</span><br>
           <span class="font-300 now">maintenant</span>
         </template>
         <template v-if="typeof delay == 'undefined'">
-          <span class="font-200">aucun</span><br>
-          <span class="font-200">passage</span>
+          <span class="font-300">aucun</span><br>
+          <span class="font-150">passage</span>
         </template>
       </div>
     </div>
@@ -149,10 +170,13 @@ module.exports = {
         <Timeline :tline="tline" />
       </div>
     </div>
-    <div v-for="disruption in line_stop.direction.disruptions" v-if="line_stop.direction.disruptions != null" class="columns">
-      <div class="column is-fullwidth is-danger">
-        <p class="font-300">{{ disruption.name }}</p>
-        <p v-html="disruption.description"></p>
+    <div class="columns" style="height: 90px">
+      <div v-if="disruption" class="column is-fullwidth">
+        <span class="font-200">{{ disruption.name }}</span>
+        <div class="scroll">
+          <div v-html="textContent(disruption.description)"></div>
+          &nbsp;
+        </div>
       </div>
     </div>
   </div>
@@ -162,6 +186,10 @@ module.exports = {
 
 .theme-bgcolor-1 {
   background-color: #00d1b2; /* Bulma's $turquoise */
+}
+
+.theme-bgcolor-2 {
+  background-color: #ff3860; /* Bulma's $red*/
 }
 
 .font-300 {
@@ -184,6 +212,10 @@ module.exports = {
   font-weight: bold;
 }
 
+.no-wrap {
+  white-space: nowrap;
+}
+
 @keyframes now {
   from { color: white; }
   to   { color: #00d1b2; }
@@ -194,6 +226,28 @@ module.exports = {
   animation-duration: 0.5s;
   animation-direction: alternate;
   animation-timing-function: ease-in;
+  animation-iteration-count: infinite;
+}
+
+@keyframes shift {
+  0%   { transform: translateX(0%);    }
+  10%  { transform: translateX(0%);    }
+  100% { transform: translateX(-100%); }
+}
+
+.scroll {
+  position: relative;
+  width: 100%;
+  font-size: 1.5em;
+  overflow: hidden;
+}
+
+.scroll > div {
+  position: absolute;
+  white-space: nowrap;
+  animation-name: shift;
+  animation-duration: 10s;
+  animation-timing-function: linear;
   animation-iteration-count: infinite;
 }
 
