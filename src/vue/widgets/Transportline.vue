@@ -39,20 +39,20 @@ module.exports = {
     tline: function() {
       var times = this.line_stop.times;
       var mode = this.line_stop.line.mode;
-      var walking_time = this.line_stop.stop.walking_time * 1000;
-      var limit_time = walking_time / 1.5;
+      var walking_min_time = this.line_stop.stop.walking_min_time * 1000;
+      var walking_max_time = this.line_stop.stop.walking_max_time * 1000;
       var duration = 30 * 60 * 1000;
       var that = this;
       var tl = {
         duration:  duration,
 //      finishing: '<img src="./fonts/stop.svg" heigth="32" width="32"/>',
         finishing: '<span style="font-size: 3em;" class="fa fa-flag-checkered"></span>',
-        style: this.styleGradient(limit_time, walking_time, duration),
+        style: this.styleGradient(walking_max_time, walking_min_time, duration),
         cb_point:  function(point, delay) {
-          if (delay < limit_time) {
+          if (delay < walking_max_time) {
             point.class.timesignMissed = true;
             point.class.timesignWarning = false;
-          } else if (delay < walking_time) {
+          } else if (delay < walking_min_time) {
             point.class.timesignWarning = true;
           }
         },
@@ -60,9 +60,9 @@ module.exports = {
           var delay = undefined;
           for (var i = 0; i < points.length; i++) {
             var point = points[i];
-            if (point.delay > limit_time) {
+            if (point.delay > walking_max_time) {
               point.class.timesignTarget = true;
-              delay = Math.max(0, point.delay - walking_time);
+              delay = Math.max(0, point.delay - walking_min_time);
               break;
             }
             point.class.timesignTarget = false;
@@ -84,12 +84,19 @@ module.exports = {
     }
   },
   methods: {
+    formatDistance: function(distance) {
+      if (distance < 1000.0) {
+        return distance + ' m';
+      }
+      var hm = Math.floor(distance / 100.0);
+      return Math.floor(hm / 10.0) + ',' + (hm % 10) + ' km';
+    },
     formatTime: function(timestamp) {
       var date = new Date(timestamp);
       return date.getHours() + ':' + ('0' + date.getMinutes()).substr(date.getMinutes() > 9);
     },
     formatPoint: function(timestamp, mode) {
-      return '<img src="./fonts/' + mode + '.svg" height="60" width="60" />' + this.formatTime(timestamp);
+      return '<img src="./fonts/' + mode + '.svg" height="61" width="61" />' + this.formatTime(timestamp);
     },
     styleGradient: function(t1, t2, ref) {
       const colorBefore = '#ddd',
@@ -107,7 +114,10 @@ module.exports = {
 </script>
 
 <template>
-  <div :style="{height : height + 'px'}">
+
+  <!-- div :style="{height : height + 'px'}" -->
+
+  <div :style="{width: '1000px'}">
     <div class="columns">
       <div class="column is-2 notification has-text-centered font-300"
           :style="{
@@ -116,7 +126,7 @@ module.exports = {
         {{ line_stop.line.mode }} {{ line_stop.line.name }}
       </div>
       <div class="column is-7 font-150">
-        station   <span class="bold">{{ line_stop.stop.name }}</span><br>
+        station   <span class="bold">{{ line_stop.stop.name }}</span> ({{ formatDistance(line_stop.stop.distance) }})<br>
         direction <span class="bold">{{ line_stop.direction.name }}</span>
       </div>
       <div class="column is-3 notification has-text-centered theme-bgcolor-1">
@@ -137,6 +147,12 @@ module.exports = {
     <div class="columns">
       <div class="column is-fullwidth">
         <Timeline :tline="tline" />
+      </div>
+    </div>
+    <div v-for="disruption in line_stop.direction.disruptions" v-if="line_stop.direction.disruptions != null" class="columns">
+      <div class="column is-fullwidth is-danger">
+        <p class="font-300">{{ disruption.name }}</p>
+        <p v-html="disruption.description"></p>
       </div>
     </div>
   </div>
@@ -184,7 +200,7 @@ module.exports = {
 .timefinishing {
   position: absolute;
   font-size: 1em;
-  color: #23d160; /* Bulma's $green */
+  /* color: #23d160; */ /* Bulma's $green */
   right: -40px;
   bottom: 10px;
 }
