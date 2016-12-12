@@ -47,12 +47,12 @@ module.exports = {
         duration:  duration,
 //      finishing: '<img src="./fonts/stop.svg" heigth="32" width="32"/>',
         finishing: '<span style="font-size: 3em;" class="fa fa-flag-checkered"></span>',
-        style: this.styleGradient(walking_max_time, walking_min_time, duration),
+        style: this.styleGradient(walking_min_time, walking_max_time, duration),
         cb_point:  function(point, delay) {
-          if (delay < walking_max_time) {
+          if (delay < walking_min_time) {
             point.class.timesignMissed = true;
             point.class.timesignWarning = false;
-          } else if (delay < walking_min_time) {
+          } else if (delay < walking_max_time) {
             point.class.timesignWarning = true;
           }
         },
@@ -60,9 +60,9 @@ module.exports = {
           var delay = undefined;
           for (var i = 0; i < points.length; i++) {
             var point = points[i];
-            if (point.delay > walking_max_time) {
+            if (point.delay > walking_min_time) {
               point.class.timesignTarget = true;
-              delay = Math.max(0, point.delay - walking_min_time);
+              delay = Math.max(0, point.delay - walking_max_time);
               break;
             }
             point.class.timesignTarget = false;
