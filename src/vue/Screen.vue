@@ -97,6 +97,9 @@ module.exports = {
     <nav class="level">
       <div class="level-left">
         <div class="level-item">
+          <img class="brand" src="/images/logo.png" alt="Logo" />
+        </div>
+        <div class="level-item">
           <p class="title" v-if="screen">{{ screen.name }}</p>
           <p class="heading">Mobili.Watch</p>
         </div>
@@ -139,6 +142,10 @@ module.exports = {
 nav {
   padding: 0 5px; 
   margin-bottom: 4px !important;
+
+  img.brand {
+    max-height: 42px;
+  }
 }
 
 div.tile.is-ancestor {

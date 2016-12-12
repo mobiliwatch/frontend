@@ -16,6 +16,9 @@ require('font-awesome/css/font-awesome.css');
 require('bulma/css/bulma.css');
 require('css/app.css');
 
+// Images
+require('img/logo.png');
+
 // Setup store
 const store = require('./store.js');
 
