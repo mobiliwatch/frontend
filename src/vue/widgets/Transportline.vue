@@ -7,6 +7,8 @@ require("./fonts/car.svg");
 require("./fonts/train.svg");
 require("./fonts/tram.svg");
 require("./fonts/stop.svg");
+require("./fonts/ellipsis.svg");
+require("./fonts/ellipsis-dark.svg");
 
 module.exports = {
   mixins : [mixins, ],
@@ -67,6 +69,15 @@ module.exports = {
             }
             point.class.timesignTarget = false;
           }
+          if (typeof delay == 'undefined' && times.length) {
+            var time = times[0].time * 1000;
+            points.push({
+              reference:   '',
+              translation: 5.0,
+              html:        '<div class="out-of-scope">' + '<img src="./fonts/' + mode + '.svg" height="60" width="60" /><span style="position: relative; left: 20px; bottom: -36px;"><img src="./fonts/ellipsis.svg" height="80" width="80" /></span><span style="position: relative; left: -40px; bottom: 24px;">' + that.formatDate(time) + '</span><br>' + that.formatTime(time) + '</div>',
+              class:       {}
+            });
+          }
           that.$set(that, 'delay', delay);
         },
         points:    [],
@@ -98,8 +109,26 @@ module.exports = {
       var date = new Date(timestamp);
       return date.getHours() + ':' + ('0' + date.getMinutes()).substr(date.getMinutes() > 9);
     },
+    formatDate: function(timestamp) {
+      var now = new Date() + this.offset;
+      const delay24h = 24 * 60 * 60 * 1000,
+            delay1w = delay24h * 7;
+      const days = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"],
+            months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+      if (timestamp < now + delay24h) {
+        // less than 24h delay -> nothing required
+        return '';
+      }
+      var date = new Date(timestamp);
+      if (timestamp < now + delay1w) {
+        // less than 1 week -> day required
+        return days[date.getDay()];
+      }
+      // at least 1 week -> full date
+      return days[date.getDay()] + ' ' + date.getDate() + ' ' + months[date.getMonth()] + ' ' + date.getFullYear();
+    },
     formatPoint: function(timestamp, mode) {
-      return '<img src="./fonts/' + mode + '.svg" height="61" width="61" />' + this.formatTime(timestamp);
+      return '<img src="./fonts/' + mode + '.svg" height="60" width="60" />' + this.formatTime(timestamp);
     },
     styleGradient: function(t1, t2, ref) {
       const colorBefore = '#ddd',
@@ -125,10 +154,10 @@ module.exports = {
 
   <div :style="{height : height + 'px'}">
     <div class="columns is-gapless">
-      <div class="column is-9">
+      <div class="column">
         <div class="columns is-gapless">
-          <div class="column is-fullwidth font-200">
-            Station <span class="bold">{{ line_stop.stop.name }}</span>
+          <div class="column is-fullwidth vertical-centered" style="height: 40px;">
+            <span class="font-200">Station <span class="bold">{{ line_stop.stop.name }}&nbsp;</span></span><span class="font-150">- {{ formatDistance(line_stop.stop.distance) }}</span>
           </div>
         </div>
         <div class="columns font-150">
@@ -138,54 +167,26 @@ module.exports = {
                 backgroundColor: '#' + line_stop.line.color_back }">
             {{ capitalizeFirstLetter(line_stop.line.mode) }} <span class="bold">{{ line_stop.line.name }}</span>
           </div>
-          <div class="column">
+          <div class="column vertical-centered" style="height: 50px;">
             Direction {{ line_stop.direction.name }}
           </div>
         </div>
       </div>
-      <div class="column is-3 notification has-text-centered theme-bgcolor-1">
+      <div class="column is-3 notification has-text-centered vertical-centered theme-bgcolor-1" style="min-width: 250px;">
         <template v-if="delay > 0">
-          <span class="font-150">partez dans</span><br>
-          <span class="font-300 bold" v-html="htmlDelay"></span>
+          <span class="font-150 cut">partez dans</span>
+          <span class="font-300 cut bold" v-html="htmlDelay"></span>
         </template>
         <template v-if="delay == 0">
-          <span class="font-150">partez</span><br>
-          <span class="font-300 now">maintenant</span>
+          <span class="font-150 cut">partez</span>
+          <span class="font-300 cut now">maintenant</span>
         </template>
         <template v-if="typeof delay == 'undefined'">
-          <span class="font-300">aucun</span><br>
-          <span class="font-150">passage</span>
+          <span class="font-200 cut">aucun passage</span>
+          <span class="font-200 cut">imminent</span>
         </template>
       </div>
     </div>
-    <!--
-    <div class="columns">
-      <div class="column is-2 notification has-text-centered no-wrap"
-          :style="{
-            color:           '#' + line_stop.line.color_front,
-            backgroundColor: '#' + line_stop.line.color_back }">
-        <span class="font-200" style="position: relative; bottom:0.15em;">{{ line_stop.line.mode }}</span><span class="font-300 bold"> {{ line_stop.line.name }}</span>
-      </div>
-      <div class="column is-7 font-150">
-        station   <span class="bold">{{ line_stop.stop.name }}</span> ({{ formatDistance(line_stop.stop.distance) }})<br>
-        direction <span class="bold">{{ line_stop.direction.name }}</span>
-      </div>
-      <div class="column is-3 notification has-text-centered theme-bgcolor-1">
-        <template v-if="delay > 0">
-          <span class="font-150">partez dans</span><br>
-          <span class="font-300 bold" v-html="htmlDelay"></span>
-        </template>
-        <template v-if="delay == 0">
-          <span class="font-150">partez</span><br>
-          <span class="font-300 now">maintenant</span>
-        </template>
-        <template v-if="typeof delay == 'undefined'">
-          <span class="font-300">aucun</span><br>
-          <span class="font-150">passage</span>
-        </template>
-      </div>
-    </div>
-    -->
     <div class="columns">
       <div class="column is-fullwidth">
         <Timeline :tline="tline" />
@@ -228,6 +229,16 @@ module.exports = {
   white-space: nowrap;
 }
 
+.vertical-centered {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.vertical-centered .cut {
+  flex-basis: 100%;
+}
+
 @keyframes now {
   from { color: white; }
   to   { color: #00d1b2; }
@@ -254,6 +265,7 @@ module.exports = {
   font-size: 2em;
   text-align: center;
   line-height: 150%;
+  width: 70px;
   right: -30px;
   bottom: -46px;
 }
@@ -269,6 +281,14 @@ module.exports = {
 
 .timesignMissed {
   opacity: 0.3;
+}
+
+.out-of-scope {
+  position: absolute;
+  width: 100%;
+  bottom: 0px;
+  left: 0;
+  white-space: nowrap;
 }
 
 </style>

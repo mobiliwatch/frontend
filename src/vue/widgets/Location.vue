@@ -53,7 +53,7 @@ module.exports = {
       // Register the next switch, after clearing previous
       if(this.timer != null)
         clearTimeout(this.timer);
-      this.$set(this, 'timer', setTimeout(this.switch_page, this.interval));
+//      this.$set(this, 'timer', setTimeout(this.switch_page, this.interval));
     },
   },
   computed : {
