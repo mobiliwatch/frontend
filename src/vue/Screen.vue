@@ -104,7 +104,7 @@ module.exports = {
           <p class="heading">Mobili.Watch</p>
         </div>
       </div>
-      <div class="level-right">
+      <div class="level-right" v-if="screen.admin">
         <div class="level-item">
           <router-link class="button is-success" to="/">Home</router-link>
         </div>
