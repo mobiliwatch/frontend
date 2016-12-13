@@ -1,18 +1,14 @@
 <script>
 var ReconnectingWebSocket = require('ReconnectingWebSocket');
-var toggleButton = require('./ToggleButton.vue');
 var Group = require('./widgets/Group.vue');
 
 module.exports = {
   components: {
-    'toggle-button': toggleButton,
     'Group' : Group,
   },
   data: function() {
     return {
-      cssSelector: 'light',
       slug : '',
-      screen : null,
       error : null,
       ws : null,
       debug : false,
@@ -35,10 +31,13 @@ module.exports = {
         credentials : true,
       };
       this.$http.get(api_url, options).then(function(resp){
-        this.$set(this, 'screen', resp.body);
+        // add screen to store
+        var store = this.$store;
+        store.commit('update_screen', {
+          update : resp.body,
+        });
 
         // Add widgets to stores
-        var store = this.$store;
         this.screen.widgets.forEach(function(w){
           store.commit('add_widget', w);
         });
@@ -62,8 +61,11 @@ module.exports = {
 
       // Load msg as json
       var payload = JSON.parse(msg.data);
-      if(payload.widget && payload.update)
-        this.$store.commit('add_update', payload);
+      if(payload.type == 'widget')
+        this.$store.commit('update_widget', payload);
+
+      else if(payload.type == 'screen')
+        this.$store.commit('update_screen', payload);
 
       else
         console.warn('Unsupported Websocket message', msg);
@@ -75,8 +77,8 @@ module.exports = {
     },
   },
   computed: {
-    pannelClass: function () {
-      return this.cssSelector == 'dark' ? [ 'dark-pannel' ] : [ 'light-pannel' ]
+    screen : function(){
+      return this.$store.state.screen;
     },
     screenHeight : function(){
       // Calc the remaining height for the tiles
@@ -92,7 +94,7 @@ module.exports = {
 </script>
 
 <template>
-  <div id="wrapper" class="fullscreen" v-bind:class="cssSelector">
+  <div id="wrapper" class="fullscreen" :class="screen.style" v-if="screen">
 
     <nav class="level">
       <div class="level-left">
@@ -113,13 +115,6 @@ module.exports = {
             <span v-if="debug">Debug ON</span>
             <span v-if="!debug">Debug OFF</span>
           </button>
-        </div>
-        <div class="level-item">
-          <toggle-button
-            option1="dark"
-            option2="light"
-            v-model="cssSelector">
-          </toggle-button>
         </div>
       </div>
     </nav>

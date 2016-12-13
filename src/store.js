@@ -4,12 +4,12 @@ var _ = require('lodash');
 
 module.exports = new Vuex.Store({
   state: {
-    updates : [],
+    screen : null,
     widgets : {},
     debug : false,
   },
   mutations: {
-    add_update : function(state, payload){
+    update_widget : function(state, payload){
 
       // Check input
 			var widget_id = payload.widget;
@@ -33,13 +33,6 @@ module.exports = new Vuex.Store({
       if (widget.type == 'LocationWidget') {
         // LocationWidget case: detailed merge
         new_widget = _.clone(widget);
-        /*
-        var line_stops = payload.update.location.line_stops;
-        for (var line_stop in line_stops) {
-          var line_stop = line_stops
-          console.log(line_stop.id);
-        }
-        */
         new_widget.location = payload.update.location;
       } else {
         // Common case: basic merge
@@ -58,6 +51,16 @@ module.exports = new Vuex.Store({
       // Update widgets in state
       Vue.set(state, 'widgets', widgets);
       console.debug('Updated widget', widget_id, payload.update);
+    },
+    update_screen : function(state, payload){
+      // Update directly the screen structure
+      var new_screen = payload.update;
+      if(!new_screen){
+        console.warn('No screen found in update');
+        return;
+      }
+      Vue.set(state, 'screen', new_screen);
+      console.info('Updated screen structure !');
     },
     add_widget : function(state, widget){
       // Store an initial widget declaration in store
