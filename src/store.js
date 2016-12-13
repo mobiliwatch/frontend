@@ -13,14 +13,18 @@ module.exports = new Vuex.Store({
 
       // Check input
 			var widget_id = payload.widget;
-      var widget = state.widgets[widget_id];
-      if(!widget){
-        console.warn('No widget found for update', payload);
-        return;
-      }
       if(!payload.update){
         console.warn('Received empty update data', payload);
         return;
+      }
+      var widget = state.widgets[widget_id];
+      if(!widget){
+        if(payload.update.type){
+          widget = payload.update; // new one
+        }else{
+          console.warn('Widget not found', widget_id);
+          return;
+        }
       }
 
 			// Shallow Clone widgets

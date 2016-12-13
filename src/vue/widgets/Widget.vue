@@ -1,5 +1,5 @@
 <template>
-  <div class="tile is-parent">
+  <div class="tile is-parent" v-if="widget">
     <article class="tile is-child box">
       <div class="content">
 
