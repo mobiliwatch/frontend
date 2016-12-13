@@ -72,10 +72,10 @@ module.exports = {
   .timeline-padding {
     position: relative;
     width: 100%;
-    height: 80px;
+    height: 110px;
     box-sizing: border-box;
     border-top: 50px solid rgba(0,0,0,0);
-    border-bottom: 20px solid rgba(0,0,0,0);
+    border-bottom: 50px solid rgba(0,0,0,0);
     border-left: 50px solid rgba(0,0,0,0);
     border-right: 50px solid rgba(0,0,0,0);
   }

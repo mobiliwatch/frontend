@@ -26,7 +26,7 @@ module.exports = {
     return {
       'current_page' : 0, // start on first page
       'nb_pages' : 0, // Total nb of pages
-      'line_height' : 300, // Height for every line item
+      'line_height' : 250, // Height for every line item
       'interval' : 10000, // In ms between each page change
       'timer' : null, // Interval tracker
     };
