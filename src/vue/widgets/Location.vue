@@ -1,15 +1,14 @@
 <template>
   <div class="location">
+    <div class="lines" v-if="pages != null">
+      <Transportline :line_stop="ls" :height="line_height" :widgetId="widgetId" v-for="ls in pages[current_page]"/>
+    </div>
 
     <nav class="pagination" v-if="pages != null && pages.length > 1">
       <a class="button" v-on:click="switch_page(current_page - 1)">Précédente</a>
       <a class="button" :class="{'is-primary' : i == current_page}" v-on:click="switch_page(i, $evt)" v-for="(p, i) in pages">{{ i+1 }}</a>
       <a class="button" v-on:click="switch_page(current_page + 1)">Suivante</a>
     </nav>
-
-    <div class="lines" v-if="pages != null">
-      <Transportline :line_stop="ls" :height="line_height" :widgetId="widgetId" v-for="ls in pages[current_page]"/>
-    </div>
   </div>
 </template>
 
@@ -56,6 +55,8 @@ module.exports = {
     },
     register_switch : function(pause) {
       // Register the next switch, after clearing previous
+      if(!this.widget.auto_pagination)
+        return;
       if(this.timer != null)
         clearTimeout(this.timer);
       var timeout = (typeof pause == 'undefined') ? this.interval : pause;
