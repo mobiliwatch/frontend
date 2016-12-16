@@ -1,15 +1,14 @@
 <template>
   <div class="location">
-
-    <nav class="pagination" v-if="pages != null && pages.length > 1">
-      <a class="button" v-on:click="switch_page(current_page - 1)">Previous</a>
-      <a class="button" :class="{'is-primary' : i == current_page}" v-on:click="switch_page(i, $evt)" v-for="(p, i) in pages">{{ i+1 }}</a>
-      <a class="button" v-on:click="switch_page(current_page + 1)">Next page</a>
-    </nav>
-
     <div class="lines" v-if="pages != null">
       <Transportline :line_stop="ls" :height="line_height" :widgetId="widgetId" v-for="ls in pages[current_page]"/>
     </div>
+
+    <nav class="pagination" v-if="pages != null && pages.length > 1">
+      <a class="button" v-on:click="switch_page(current_page - 1)">Précédente</a>
+      <a class="button" :class="{'is-primary' : i == current_page}" v-on:click="switch_page(i, $evt)" v-for="(p, i) in pages">{{ i+1 }}</a>
+      <a class="button" v-on:click="switch_page(current_page + 1)">Suivante</a>
+    </nav>
   </div>
 </template>
 
@@ -26,8 +25,9 @@ module.exports = {
     return {
       'current_page' : 0, // start on first page
       'nb_pages' : 0, // Total nb of pages
-      'line_height' : 240, // Height for every line item
-      'interval' : 5000, // In ms between each page change
+      'line_height' : 250, // Height for every line item
+      'interval' : 10000, // In ms between each page change
+      'pause' : 60000, // In ms before pages change again (after a manual page selection)
       'timer' : null, // Interval tracker
     };
   },
@@ -37,23 +37,30 @@ module.exports = {
         evt.preventDefault();
 
       // By default, switch to next page
-      if(page_id == undefined)
+      var pause;
+      if(page_id == undefined) {
         page_id = this.current_page + 1;
+      } else {
+        pause = this.pause;
+      }
 
       // Keep inside bounds
-      page_id = page_id % this.nb_pages;
+      page_id = (page_id + this.nb_pages) % this.nb_pages;
 
       // Save new page
       this.$set(this, 'current_page', page_id);
 
       // Trigger next switch
-      this.register_switch();
+      this.register_switch(pause);
     },
-    register_switch : function(){
+    register_switch : function(pause) {
       // Register the next switch, after clearing previous
+      if(!this.widget.auto_pagination)
+        return;
       if(this.timer != null)
         clearTimeout(this.timer);
-      this.$set(this, 'timer', setTimeout(this.switch_page, this.interval));
+      var timeout = (typeof pause == 'undefined') ? this.interval : pause;
+      this.$set(this, 'timer', setTimeout(this.switch_page, timeout));
     },
   },
   computed : {
@@ -77,11 +84,12 @@ module.exports = {
         out.push(stops.slice(p * per_page, (p+1) * per_page));
       }
 
-      // Switch pages regularly
-      this.register_switch();
-
       return out;
     },
+  },
+  mounted : function () {
+    // Switch pages regularly
+    this.register_switch();
   },
 }
 </script>

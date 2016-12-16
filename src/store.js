@@ -38,6 +38,7 @@ module.exports = new Vuex.Store({
         // LocationWidget case: detailed merge
         new_widget = _.clone(widget);
         new_widget.location = payload.update.location;
+        new_widget.auto_pagination = payload.update.auto_pagination;
       } else {
         // Common case: basic merge
         new_widget = _.merge(widget, payload.update);

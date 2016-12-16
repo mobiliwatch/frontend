@@ -21,8 +21,8 @@ module.exports = {
     // Load a screen data and strore them
     load_screen : function(slug, token){
       // TODO: use global urls
-      var api_url = API_URL + '/screen/' + slug + '/'; 
-      var ws_url = WS_URL + '/screen/' + slug + '/'; 
+      var api_url = API_URL + '/screen/' + slug + '/';
+      var ws_url = WS_URL + '/screen/' + slug + '/';
       if(token){
         api_url += 'shared/' + token + '/';
         ws_url += 'shared/' + token + '/';
@@ -52,7 +52,7 @@ module.exports = {
 
       }).catch(function(err){
         console.log('Failed to load screen', err);
-        this.$set(this, 'error', err); 
+        this.$set(this, 'error', err);
       });
     },
 
@@ -128,14 +128,14 @@ module.exports = {
     </div>
 
     <div v-if="screen" class="tile is-ancestor" :style="{height: screenHeight}">
-      <Group :group="group" v-for="group in screen.groups" />
+      <Group :group="group" :sibling="screen.groups.length" v-for="group in screen.groups" />
     </div>
   </div>
 </template>
 
 <style lang="sass">
 nav {
-  padding: 0 5px; 
+  padding: 0 5px;
   margin-bottom: 4px !important;
 
   img.brand {
