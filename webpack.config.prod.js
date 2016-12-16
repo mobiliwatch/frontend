@@ -23,7 +23,7 @@ config.plugins.push(
 // Remove console.*
 config.module.loaders.push({
   test: /\.vue|js$/,
-  loader: WebpackStrip.loader('console.info', 'console.log'),
+  loader: WebpackStrip.loader('console.info', 'console.log', 'console.debug'),
 });
 
 module.exports = config;
