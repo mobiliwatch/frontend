@@ -1,6 +1,7 @@
 var config = require('./webpack.config'),
     webpack = require('webpack'),
-    path = require("path");
+    path = require("path"),
+    WebpackStrip = require('webpack-strip');
 
 // Output generated files in dist
 config.output = {
@@ -18,5 +19,11 @@ config.plugins.push(
     mangle: false,
   })
 );
+
+// Remove console.*
+config.module.loaders.push({
+  test: /\.vue|js$/,
+  loader: WebpackStrip.loader('console.info', 'console.log'),
+});
 
 module.exports = config;
