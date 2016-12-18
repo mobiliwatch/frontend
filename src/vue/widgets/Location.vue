@@ -1,7 +1,14 @@
 <template>
   <div class="location">
+    <ResponsDiv
+      :schema="[
+        { name: 'large',  'min-width': 800 },
+        { name: 'medium', 'min-width': 600 },
+        { name: 'small' } ]"
+      v-model="divclass" />
+
     <div class="lines" v-if="pages != null">
-      <Transportline :line_stop="ls" :height="line_height" :widgetId="widgetId" v-for="ls in pages[current_page]"/>
+      <Transportline :line_stop="ls" :height="line_height" :divclass="divclass" :widgetId="widgetId" v-for="ls in pages[current_page]"/>
     </div>
 
     <nav class="pagination" v-if="pages != null && pages.length > 1">
@@ -9,17 +16,20 @@
       <a class="button" :class="{'is-primary' : i == current_page}" v-on:click="switch_page(i, $evt)" v-for="(p, i) in pages">{{ i+1 }}</a>
       <a class="button" v-on:click="switch_page(current_page + 1)">Suivante</a>
     </nav>
+
   </div>
 </template>
 
 <script>
 var mixins = require('./mixins.js');
-var Transportline = require('./Transportline.vue')
+var Transportline = require('./Transportline.vue');
+var ResponsDiv = require('./ResponsDiv.vue');
 
 module.exports = {
   mixins : [mixins, ],
   components : {
-    'Transportline': Transportline
+    'Transportline': Transportline,
+    'ResponsDiv':    ResponsDiv,
   },
   data : function(){
     return {

@@ -16,8 +16,9 @@ module.exports = {
     'Timeline': Timeline
   },
   props: {
-    'height' : Number,
+    'height' :   Number,
     'line_stop': Object,
+    'divclass':  String,
   },
   data : function(){
     return {
@@ -47,7 +48,6 @@ module.exports = {
       var that = this;
       var tl = {
         duration:  duration,
-//      finishing: '<img src="./fonts/stop.svg" heigth="32" width="32"/>',
         finishing: '<span style="font-size: 3em;" class="fa fa-flag-checkered"></span>',
         style: this.styleGradient(walking_min_time, walking_max_time, duration),
         cb_point:  function(point, delay) {
@@ -74,7 +74,7 @@ module.exports = {
             points.push({
               reference:   '',
               translation: 5.0,
-              html:        '<div class="out-of-scope">' + '<img src="./fonts/' + mode + '.svg" height="60" width="60" /><span style="position: relative; left: 20px; bottom: -36px;"><img src="./fonts/ellipsis.svg" height="80" width="80" /></span><span style="position: relative; left: -40px; bottom: 24px;">' + that.formatDate(time) + '</span><br>' + that.formatTime(time) + '</div>',
+              html:        that.formatOutOfScopePoint(time),
               class:       {}
             });
           }
@@ -87,7 +87,7 @@ module.exports = {
         var point = {
           reference: times[i].reference,
           time:      time + this.offset,
-          html:      this.formatPoint(time, mode),
+          html:      this.formatPoint(time),
         };
         tl.points.push(point);
       }
@@ -127,8 +127,22 @@ module.exports = {
       // at least 1 week -> full date
       return days[date.getDay()] + ' ' + date.getDate() + ' ' + months[date.getMonth()] + ' ' + date.getFullYear();
     },
-    formatPoint: function(timestamp, mode) {
+    formatPoint: function(timestamp) {
+      var mode = this.line_stop.line.mode;
       return '<img src="./fonts/' + mode + '.svg" height="60" width="60" />' + this.formatTime(timestamp);
+    },
+    formatOutOfScopePoint: function(timestamp) {
+      var mode = this.line_stop.line.mode;
+      return '<div class="out-of-scope"> \
+                <img src="./fonts/' + mode + '.svg" height="60" width="60" /> \
+                <span style="position: relative; left: 20px; bottom: -36px;"> \
+                  <img src="./fonts/ellipsis.svg" height="80" width="80" /> \
+                </span> \
+                <span style="position: relative; left: -40px; bottom: 24px;">' +
+                  this.formatDate(timestamp) +
+                '</span><br>' +
+                this.formatTime(timestamp) +
+              '</div>';
     },
     styleGradient: function(t1, t2, ref) {
       const colorBefore = '#ddd',
@@ -152,7 +166,7 @@ module.exports = {
 
 <template>
 
-  <div :style="{height : height + 'px'}">
+  <div :style="{height : height + 'px'}" :class="'transportline-' + this.divclass">
     <div class="columns is-gapless">
       <div class="column">
         <div class="columns is-gapless">
@@ -161,7 +175,7 @@ module.exports = {
           </div>
         </div>
         <div class="columns font-150">
-          <div class="column is-2 notification has-text-centered no-wrap"
+          <div class="column is-2 notification has-text-centered no-wrap" style="min-width: 120px;"
               :style="{
                 color:           '#' + line_stop.line.color_front,
                 backgroundColor: '#' + line_stop.line.color_back }">
@@ -196,6 +210,17 @@ module.exports = {
 </template>
 
 <style>
+
+.transportline-large {
+}
+
+.transportline-medium {
+  font-size: 0.7em;
+}
+
+.transportline-small {
+  font-size: 0.5em;
+}
 
 .theme-bgcolor-1 {
   background-color: #00d1b2; /* Bulma's $turquoise */

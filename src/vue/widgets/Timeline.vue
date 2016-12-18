@@ -29,7 +29,7 @@ module.exports = {
       for (i = 0; i < this.tline.points.length; i++) {
         var tpoint = this.tline.points[i];
         var delay = tpoint.time - currentTime;
-        if (delay <= this.tline.duration) {
+        if ((delay <= this.tline.duration) && (delay > -60000)) {
           var translation = (1.0 - Math.max(delay, 0) / this.tline.duration) * 100.0;
           var point = {
             reference:   tpoint.reference,
