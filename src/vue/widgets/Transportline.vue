@@ -70,7 +70,7 @@ module.exports = {
             point.class.timesignTarget = false;
           }
           if (typeof delay == 'undefined' && times.length) {
-            var time = times[0].time * 1000;
+            var time = times[points.length].time * 1000;
             points.push({
               reference:   '',
               translation: 5.0,
@@ -110,7 +110,7 @@ module.exports = {
       return date.getHours() + ':' + ('0' + date.getMinutes()).substr(date.getMinutes() > 9);
     },
     formatDate: function(timestamp) {
-      var now = new Date() + this.offset;
+      var now = new Date().getTime() + this.offset;
       const delay24h = 24 * 60 * 60 * 1000,
             delay1w = delay24h * 7;
       const days = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"],
