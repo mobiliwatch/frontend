@@ -1,44 +1,73 @@
 <template>
-  <div class="weather">
-    <h2>Météo à {{ widget.city.name }}</h2>
+  <div class="weather" v-if="widget.revision > 0">
+    <h3 class="title">Météo à {{ widget.city.name }}</h4>
+    <hr />
 
-
-    <div class="weather" v-if="widget.revision > 0">
-      <div>
+    <div class="media is-fat">
+      <div class="media-left">
         <span class="icon is-huge">
           <span class="wi" :class="'wi-owm-' + widget.code"></span>
         </span>
-        <h4>{{ weather_status_french }}</h4>
       </div>
-      <div>
+      <div class="media-content">
+        <p class="title is-3">{{ weather_status_french }}</p>
+        <p class="subtitle is-5">En ce moment</p>
+      </div>
+    </div>
+
+    <div class="media">
+      <div class="media-left">
         <span class="icon is-medium">
           <span class="wi wi-thermometer"></span>
         </span>
-        <span>{{ widget.temperature.temp_min }} à {{ widget.temperature.temp_max }} °C</span>
       </div>
-      <div>
+      <div class="media-content">
+        <span v-if="widget.temperature.temp_min == widget.temperature.temp_max">{{ widget.temperature.temp_min }} °C</span>
+        <span v-else>{{ widget.temperature.temp_min }} à {{ widget.temperature.temp_max }} °C</span>
+      </div>
+    </div>
+
+    <div class="media" :style="{color: air_quality.color}" v-if="air_quality">
+      <div class="media-left">
+        <span class="icon is-medium">
+          <span class="wi wi-smog"></span>
+        </span>
+      </div>
+      <div class="media-content">
+        {{ air_quality.text }} qualité de l'air (indice {{ air_quality.y }})
+      </div>
+    </div>
+
+    <div class="media">
+      <div class="media-left">
         <span class="icon is-medium">
           <span class="wi wi-sunrise"></span>
         </span>
-        <span>Lever du soleil à {{ widget.sunrise|time }}</span>
       </div>
-      <div>
+      <div class="media-content">
+        Lever du soleil à {{ widget.sunrise|time }}
+      </div>
+    </div>
+
+    <div class="media">
+      <div class="media-left">
         <span class="icon is-medium">
           <span class="wi wi-sunset"></span>
         </span>
-        <span>Coucher du soleil à {{ widget.sunset|time }}</span>
       </div>
-      <div>
+      <div class="media-content">
+        Coucher du soleil à {{ widget.sunset|time }}
+      </div>
+    </div>
+
+    <div class="media">
+      <div class="media-left">
         <span class="icon is-medium">
           <span class="wi wi-humidity"></span>
         </span>
-        <span>{{ widget.humidity }}% d'humidité</span>
       </div>
-      <div>
-        <span class="icon is-medium">
-          <span class="fa fa-clock-o"></span>
-        </span>
-        <span>Observé il y'a {{ widget.observed|timesince }}h</span>
+      <div class="media-content">
+        {{ widget.humidity }}% d'humidité
       </div>
     </div>
   </div>
@@ -67,6 +96,29 @@ module.exports = {
     },
   },
   computed : {
+    air_quality : function(){
+      // Texts
+      var texts = [
+        'Très bonne',
+        'Bonne',
+        'Bonne',
+        'Bonne',
+        'Moyen',
+        'Médiocre',
+        'Médiocre',
+        'Médiocre',
+        'Mauvaise',
+        'Très mauvaise',
+      ];
+
+      // Get the air quality for today
+      var data = this.widget.air_quality;
+      if(!data)
+        return null;
+      var out = data[data.length - 1];
+      out.text = texts[out.y - 1];
+      return out;
+    },
     weather_status_french : function(){
       // From https://github.com/buche/leaflet-openweathermap/blob/master/leaflet-openweathermap.js
       var translations = {
@@ -140,9 +192,16 @@ module.exports = {
     display: inline-block;
     font-size: 90px;
     height: 96px;
-    line-height: 96px;
     text-align: center;
-    vertical-align: top;
     width: 96px;
+}
+
+.is-fat {
+  .media-content {
+    margin-top: 6px;
+  }
+}
+.media + .media {
+  border-top: 0;
 }
 </style>
