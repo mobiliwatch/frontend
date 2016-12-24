@@ -5,7 +5,8 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var webpack = require("webpack");
 
 var DEBUG = !process.env.NODE_ENV || process.env.NODE_ENV == 'dev';
-var API_URL = DEBUG ? 'http://localhost:8000/api' : 'https://mobili.watch/api';
+var BACKEND_URL = DEBUG ? 'http://localhost:8000' : 'https://mobili.watch';
+var API_URL = BACKEND_URL + '/api';
 var WS_URL = DEBUG ? 'ws://localhost:8000' : 'wss://mobili.watch';
 
 module.exports = {
@@ -19,6 +20,7 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       '__DEBUG__' : DEBUG,
+      'BACKEND_URL' : JSON.stringify(BACKEND_URL),
       'API_URL' : JSON.stringify(API_URL),
       'WS_URL' : JSON.stringify(WS_URL),
     }),

@@ -89,6 +89,9 @@ module.exports = {
     debug : function(){
       return this.$store.state.debug;
     },
+    backend_url: function(){
+      return BACKEND_URL; // replaced by webpack
+    },
   }
 };
 </script>
@@ -99,11 +102,21 @@ module.exports = {
     <nav class="level">
       <div class="level-left">
         <div class="level-item">
-          <img class="brand" src="/images/logo.png" alt="Logo" />
+          <a class="brand" :href="backend_url">
+            <img class="brand" src="/images/logo.png" alt="Logo" />
+          </a>
         </div>
         <div class="level-item">
-          <p class="title" v-if="screen">{{ screen.name }}</p>
-          <p class="heading">Mobili.Watch</p>
+          <p class="title" v-if="screen">
+            <a :href="backend_url">
+              {{ screen.name }}
+            </a>
+          </p>
+          <p class="heading">
+            <a :href="backend_url">
+              Mobili.Watch
+            </a>
+          </p>
         </div>
       </div>
       <div class="level-right" v-if="screen.admin">
@@ -140,6 +153,11 @@ nav {
 
   img.brand {
     max-height: 42px;
+  }
+
+  a, a:hover {
+    color: black;
+    text-decoration: none;
   }
 }
 
