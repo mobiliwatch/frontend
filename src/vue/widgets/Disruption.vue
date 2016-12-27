@@ -3,15 +3,17 @@
     <h1>Perturbations & informations</h1>
 
     <div v-for="d in widget.disruptions">
+      <hr />
       <!-- FIXME: multiple calls to disruptionType() function -->
       <span class="font-250 fa" :class="disruptionType(d).fa" :style="disruptionType(d).color ? { color: disruptionType(d).color } : {}"></span>
       <span class="font-150">{{ d.name }}</span>
       <!-- d.description field not used for now -->
-      <hr />
     </div>
 
     <div v-if="widget.disruptions.length == 0">
-      Ni perturbation ni information pour vos lignes !
+      <hr />
+      <span class="font-250 fa fa-check" style="color: #23d160;"></span>
+      <span class="font-150">Ni perturbation ni information pour vos lignes</span>
     </div>
 
   </div>
