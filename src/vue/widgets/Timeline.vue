@@ -76,7 +76,7 @@ module.exports = {
     box-sizing: border-box;
     border-top: 50px solid rgba(0,0,0,0);
     border-bottom: 20px solid rgba(0,0,0,0);
-    border-left: 50px solid rgba(0,0,0,0);
+    border-left: 20px solid rgba(0,0,0,0);
     border-right: 50px solid rgba(0,0,0,0);
   }
 

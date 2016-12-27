@@ -1,4 +1,5 @@
 <script>
+var _ = require('lodash');
 var mixins = require('./mixins.js');
 var Timeline = require('./Timeline.vue')
 // icons from http://www.flaticon.com/packs/vehicles : free license with attribution
@@ -38,6 +39,35 @@ module.exports = {
     },
     offset : function() {
       return this.widget.updated.local - this.widget.updated.server;
+    },
+    disruptionTypes: function() {
+      var disruptions = this.line_stop.direction.disruptions;
+      const types = {
+        Travaux: { priority: 10, fa: 'fa-exclamation-triangle', color: '#ff3860' /* Bulma's $red*/ },
+        /* or fa-bullhorn ? */
+      };
+      const typeDefault = { priority: 0, fa: 'fa-info-circle' };
+      var foundTypes = _.sortBy(_.uniq(_.map(
+        _.keyBy(disruptions,
+          /* step 1: group by type.Name */
+          function (d) {
+            return d.type.Name;
+          }),
+        /* step 2: convert to types */
+        function (v, k) {
+          if (k in types) {
+            return types[k];
+          }
+          return typeDefault;
+        })
+        /* step 3: uniq */
+        ),
+        /* step 4: sort by (ascending) priority */
+        [ function (t) {
+            return -t.priority;
+          },
+        ]);
+      return foundTypes;
     },
     tline: function() {
       var times = this.line_stop.times;
@@ -202,7 +232,10 @@ module.exports = {
       </div>
     </div>
     <div class="columns">
-      <div class="column is-fullwidth">
+      <div class="column is-1 has-text-centered vertical-centered">
+        <span v-for="d in disruptionTypes" class="font-250 cut fa" :class="d.fa" :style="d.color ? { color: d.color } : {}"></span>
+      </div>
+      <div class="column is-11">
         <Timeline :tline="tline" />
       </div>
     </div>
