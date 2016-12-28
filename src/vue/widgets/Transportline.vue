@@ -112,14 +112,20 @@ module.exports = {
         },
         points:    [],
       };
+      var prevtime = null;
+      const mindelta = 3.5 * 60 * 1000;
       for (var i = 0; i < times.length; i++) {
         var time = times[i].time * 1000;
+        if (prevtime) {
+          time = Math.max(prevtime + mindelta, time);
+        }
         var point = {
           reference: times[i].reference,
           time:      time + this.offset,
           html:      this.formatPoint(time),
         };
         tl.points.push(point);
+        prevtime = time;
       }
       return tl;
     }
@@ -159,14 +165,14 @@ module.exports = {
     },
     formatPoint: function(timestamp) {
       var mode = this.line_stop.line.mode;
-      return '<img src="./fonts/' + mode + '.svg" height="60" width="60" />' + this.formatTime(timestamp);
+      return '<img src="./fonts/' + mode + '.svg" />' + this.formatTime(timestamp);
     },
     formatOutOfScopePoint: function(timestamp) {
       var mode = this.line_stop.line.mode;
       return '<div class="out-of-scope"> \
-                <img src="./fonts/' + mode + '.svg" height="60" width="60" /> \
-                <span style="position: relative; left: 20px; bottom: -36px;"> \
-                  <img src="./fonts/ellipsis.svg" height="80" width="80" /> \
+                <img src="./fonts/' + mode + '.svg" /> \
+                <span class="oos-ellipsis"> \
+                  <img src="./fonts/ellipsis.svg" /> \
                 </span> \
                 <span style="position: relative; left: -40px; bottom: 24px;">' +
                   this.formatDate(timestamp) +
@@ -200,23 +206,23 @@ module.exports = {
     <div class="columns is-gapless">
       <div class="column">
         <div class="columns is-gapless">
-          <div class="column is-fullwidth vertical-centered" style="height: 40px;">
+          <div class="column is-fullwidth vertical-centered station">
             <span class="font-200">Station <span class="bold">{{ line_stop.stop.name }}&nbsp;</span></span><span class="font-150">- {{ formatDistance(line_stop.stop.distance) }}</span>
           </div>
         </div>
-        <div class="columns font-150">
-          <div class="column is-2 notification has-text-centered no-wrap" style="min-width: 120px;"
+        <div class="columns is-mobile font-150">
+          <div class="column is-2 notification has-text-centered no-wrap linename"
               :style="{
                 color:           '#' + line_stop.line.color_front,
                 backgroundColor: '#' + line_stop.line.color_back }">
             {{ capitalizeFirstLetter(line_stop.line.mode) }} <span class="bold">{{ line_stop.line.name }}</span>
           </div>
-          <div class="column vertical-centered" style="height: 50px;">
+          <div class="column vertical-centered direction">
             Direction {{ line_stop.direction.name }}
           </div>
         </div>
       </div>
-      <div class="column is-3 notification has-text-centered vertical-centered theme-bgcolor-1" style="min-width: 250px;">
+      <div class="column is-3 notification has-text-centered vertical-centered theme-bgcolor-1 clock">
         <template v-if="delay > 0">
           <span class="font-150 cut">partez dans</span>
           <span class="font-300 cut bold" v-html="htmlDelay"></span>
@@ -231,7 +237,7 @@ module.exports = {
         </template>
       </div>
     </div>
-    <div class="columns">
+    <div class="columns timelinecontainer">
       <div class="column is-1 has-text-centered vertical-centered">
         <span v-for="d in disruptionTypes" class="font-250 cut fa" :class="d.fa" :style="d.color ? { color: d.color } : {}"></span>
       </div>
@@ -243,17 +249,6 @@ module.exports = {
 </template>
 
 <style>
-
-.transportline-large {
-}
-
-.transportline-medium {
-  font-size: 0.7em;
-}
-
-.transportline-small {
-  font-size: 0.5em;
-}
 
 .theme-bgcolor-1 {
   background-color: #00d1b2; /* Bulma's $turquoise */
@@ -310,22 +305,20 @@ module.exports = {
   animation-iteration-count: infinite;
 }
 
+.timeline-padding {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .timefinishing {
   position: absolute;
   font-size: 1em;
-  /* color: #23d160; */ /* Bulma's $green */
-  right: -40px;
-  bottom: 10px;
 }
 
 .timesign {
   position: absolute;
-  font-size: 2em;
   text-align: center;
-  line-height: 150%;
-  width: 70px;
-  right: -30px;
-  bottom: -46px;
 }
 
 .timesignTarget {
@@ -347,6 +340,209 @@ module.exports = {
   bottom: 0px;
   left: 0;
   white-space: nowrap;
+}
+
+.out-of-scope > .oos-ellipsis > img {
+  max-width: 70px;
+  width: 70px;
+  height: 70px;
+}
+
+.transportline-large {
+}
+.transportline-large .station {
+  height: 40px;
+}
+.transportline-large .linename {
+  min-width: 120px;
+}
+.transportline-large .direction {
+  height: 50px;
+}
+.transportline-large .clock {
+  min-width: 250px;
+}
+.transportline-large .timeline-padding {
+  height: 80px;
+  border-top: 50px solid transparent;
+  border-bottom: 20px solid transparent;
+  border-left: 20px solid transparent;
+  border-right: 50px solid transparent;
+}
+.transportline-large .timesign {
+  font-size: 2em;
+  line-height: 150%;
+  width: 70px;
+  right: -30px;
+  bottom: -46px;
+}
+.transportline-large .timesign > img {
+  width: 60px;
+  height: 60px;
+}
+.transportline-large .timesign > .out-of-scope > img {
+  width: 60px;
+  height: 60px;
+}
+.transportline-large .timefinishing {
+  right: -40px;
+  bottom: 10px;
+}
+.transportline-large .out-of-scope > .oos-ellipsis {
+  position: relative;
+  left: 20px;
+  bottom: -36px;
+}
+
+.transportline-medium {
+  font-size: 0.75em;
+}
+.transportline-medium .station {
+  height: 30px;
+}
+.transportline-medium .linename {
+  min-width: 90px;
+}
+.transportline-medium .direction {
+  height: 38px;
+}
+.transportline-medium .clock {
+  min-width: 188px;
+}
+.transportline-medium .timeline-padding {
+  height: 50px;
+  border-top: 30px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 15px solid transparent;
+  border-right: 38px solid transparent;
+}
+.transportline-medium .timesign {
+  font-size: 2em;
+  line-height: 150%;
+  width: 55px;
+  right: -22px;
+  bottom: -35px;
+}
+.transportline-medium .timesign > img {
+  width: 45px;
+  height: 45px;
+}
+.transportline-medium .timesign > .out-of-scope > img {
+  width: 45px;
+  height: 45px;
+}
+.transportline-medium .timefinishing {
+  right: -30px;
+  bottom: 10px;
+}
+.transportline-medium .out-of-scope > .oos-ellipsis {
+  position: relative;
+  left: 20px;
+  bottom: -34px;
+}
+
+.transportline-small {
+  font-size: 0.75em;
+}
+.transportline-small .station {
+  height: 30px;
+}
+.transportline-small .linename {
+  min-width: 90px;
+}
+.transportline-small .direction {
+  height: 38px;
+}
+.transportline-small .clock {
+  min-width: 188px;
+}
+.transportline-small .timeline-padding {
+  height: 30px;
+  border-top: 20px solid transparent;
+  border-bottom: 0px solid transparent;
+  border-left: 15px solid transparent;
+  border-right: 38px solid transparent;
+}
+.transportline-small .timesign {
+  font-size: 1.4em;
+  line-height: 180%;
+  width: 45px;
+  right: -18px;
+  bottom: -27px;
+}
+.transportline-small .timesign > img {
+  width: 35px;
+  height: 35px;
+}
+.transportline-small .timesign > .out-of-scope > img {
+  width: 35px;
+  height: 35px;
+}
+.transportline-small .timefinishing {
+  right: -30px;
+  bottom: 10px;
+}
+.transportline-small .out-of-scope > .oos-ellipsis {
+  position: relative;
+  left: 20px;
+  bottom: -37px;
+}
+
+.transportline-tiny {
+  font-size: 0.6em;
+}
+.transportline-tiny .station {
+  height: 25px;
+}
+.transportline-tiny .linename {
+  min-width: 70px;
+}
+.transportline-tiny .direction {
+  height: 30px;
+}
+.transportline-tiny .clock {
+  min-width: 150px;
+}
+.transportline-tiny .timeline-padding {
+  height: 30px;
+  border-top: 20px solid transparent;
+  border-bottom: 0px solid transparent;
+  border-left: 15px solid transparent;
+  border-right: 38px solid transparent;
+}
+.transportline-tiny .timesign {
+  font-size: 1.4em;
+  line-height: 180%;
+  width: 45px;
+  right: -18px;
+  bottom: -27px;
+}
+.transportline-tiny .timesign > img {
+  width: 35px;
+  height: 35px;
+}
+.transportline-tiny .timesign > .out-of-scope > img {
+  width: 35px;
+  height: 35px;
+}
+.transportline-tiny .timefinishing {
+  right: -30px;
+  bottom: 10px;
+}
+.transportline-tiny .out-of-scope > .oos-ellipsis {
+  position: relative;
+  left: 20px;
+  bottom: -34px;
+}
+
+.transportline-tiny .timelinecontainer {
+  visibility: hidden;
+}
+
+@media screen and (max-width: 768px) {
+  .timelinecontainer {
+    visibility: hidden;
+  }
 }
 
 </style>

@@ -4,7 +4,8 @@
       :schema="[
         { name: 'large',  'min-width': 800 },
         { name: 'medium', 'min-width': 600 },
-        { name: 'small' } ]"
+        { name: 'small',  'min-width': 500 },
+        { name: 'tiny'                     }]"
       v-model="divclass" />
 
     <div class="lines" v-if="pages != null">
@@ -39,7 +40,13 @@ module.exports = {
       'interval' : 10000, // In ms between each page change
       'pause' : 60000, // In ms before pages change again (after a manual page selection)
       'timer' : null, // Interval tracker
+      'divclass' : undefined,
     };
+  },
+  watch : {
+    divclass: function () {
+      this.line_height = { large: 250, medium: 200, small: 180, tiny: 100 }[this.divclass];
+    },
   },
   methods : {
     switch_page : function(page_id, evt){
@@ -77,6 +84,12 @@ module.exports = {
     'pages' : function(){
       if(this.widget.revision == 0)
          return null;
+
+      // "mobile" layout
+      if (window.innerWidth <= 768) {
+        this.$set(this, 'nb_pages', 1);
+        return [ this.widget.location.line_stops ];
+      }
 
       // Get the height for container
       var h = this.$el.clientHeight;

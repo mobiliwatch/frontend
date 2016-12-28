@@ -69,17 +69,6 @@ module.exports = {
 
 <style>
 
-  .timeline-padding {
-    position: relative;
-    width: 100%;
-    height: 80px;
-    box-sizing: border-box;
-    border-top: 50px solid rgba(0,0,0,0);
-    border-bottom: 20px solid rgba(0,0,0,0);
-    border-left: 20px solid rgba(0,0,0,0);
-    border-right: 50px solid rgba(0,0,0,0);
-  }
-
   .timeline {
     position: absolute;
     width: 100%;

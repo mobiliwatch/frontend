@@ -3,8 +3,8 @@
     <h1>Perturbations & informations</h1>
 
     <div v-for="d in widget.disruptions" class="media">
-      <!-- FIXME: multiple calls to disruptionType() function -->
       <div class="media-left">
+        <!-- FIXME: multiple calls to disruptionType() function -->
         <span class="font-250 fa" :class="disruptionType(d).fa" :style="disruptionType(d).color ? { color: disruptionType(d).color } : {}"></span>
       </div>
       <div class="media-content">

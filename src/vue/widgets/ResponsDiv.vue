@@ -56,7 +56,8 @@ module.exports = {
           }
         }
         this.state = state;
-        console.log(this.width + ' x ' + this.height + ' => ' + this.state);
+        // console.log('window width: ' + window.innerWidth);
+        // console.log('div size: ' + this.width + ' x ' + this.height + ' => ' + this.state);
         this.$emit('input', this.state);
       }
     },
