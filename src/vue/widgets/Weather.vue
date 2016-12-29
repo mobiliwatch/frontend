@@ -201,10 +201,10 @@ module.exports = {
 <style lang="sass">
 .icon.is-huge {
     display: inline-block;
-    font-size: 90px;
-    height: 96px;
+    font-size: 4em;
+    height: auto;
     text-align: center;
-    width: 96px;
+    width: auto;
 }
 
 .is-fat {
