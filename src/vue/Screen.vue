@@ -166,13 +166,4 @@ div.tile.is-ancestor {
   padding-right: 10px;
 }
 
-/* Dark mode */
-div#wrapper.dark {
-
-  nav {
-    .title {
-      color: white;
-    }
-  }
-}
 </style>

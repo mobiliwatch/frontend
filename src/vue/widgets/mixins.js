@@ -9,5 +9,9 @@ module.exports = {
     widget : function(){
       return this.$store.state.widgets[this.widgetId];
     },
+    // Get screen from store
+    screen : function(){
+      return this.$store.state.screen;
+    },
   }
 };

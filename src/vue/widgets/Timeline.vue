@@ -82,7 +82,7 @@ module.exports = {
     width: 100%;
     height: 10px;
     box-sizing: border-box;
-    border-right: 10px solid rgba(0,0,0,0);
+    border-right: 10px solid transparent;
   }
 
 </style>

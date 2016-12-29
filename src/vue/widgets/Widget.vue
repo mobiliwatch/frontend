@@ -82,17 +82,22 @@ div.content {
 div#wrapper.dark {
   .hero {
     background-color: transparent !important;
-  } 
+  }
+
+  .button:not(.is-primary) {
+    background-color: transparent !important;
+  }
 
   .box {
     background-color: transparent !important;
     border: 1px solid #222;
-  } 
+  }
 
   .box, div.content {
     *, & {
-      color: white !important;
+      color: white;
     }
   }
+
 }
 </style>

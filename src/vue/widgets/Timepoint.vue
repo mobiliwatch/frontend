@@ -45,8 +45,16 @@ module.exports = {
     border-radius: 14px;
     border-style: solid;
     border-width: 2px;
+  }
+
+  div#wrapper.light .timepoint {
     border-color: black;
     background-color: white;
+  }
+
+  div#wrapper.dark .timepoint {
+    border-color: white;
+    background-color: black;
   }
 
 </style>

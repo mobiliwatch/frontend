@@ -4,10 +4,13 @@ var mixins = require('./mixins.js');
 var Timeline = require('./Timeline.vue')
 // icons from http://www.flaticon.com/packs/vehicles : free license with attribution
 require("./fonts/bus.svg");
+require("./fonts/bus-dark.svg");
 require("./fonts/car.svg");
+require("./fonts/car-dark.svg");
 require("./fonts/train.svg");
+require("./fonts/train-dark.svg");
 require("./fonts/tram.svg");
-require("./fonts/stop.svg");
+require("./fonts/tram-dark.svg");
 require("./fonts/ellipsis.svg");
 require("./fonts/ellipsis-dark.svg");
 
@@ -29,7 +32,7 @@ module.exports = {
   computed: {
     htmlDelay: function() {
       if (this.delay) {
-        const separator = '<span style="font-size:0.5em; position: relative; bottom:0.25em;"> min </span>';
+        const separator = '<span style="font-size:0.5em; position: relative; bottom:0.25em; color: black;"> min </span>';
         var sec = Math.floor(this.delay / 1000) % 60;
         sec = (sec < 10) ? '0' + sec : '' + sec;
         var min = Math.floor(this.delay / 60000);
@@ -165,14 +168,16 @@ module.exports = {
     },
     formatPoint: function(timestamp) {
       var mode = this.line_stop.line.mode;
-      return '<img src="./fonts/' + mode + '.svg" />' + this.formatTime(timestamp);
+      var style = { light: '', dark: '-dark' }[this.screen.style];
+      return '<img src="./fonts/' + mode + style + '.svg" />' + this.formatTime(timestamp);
     },
     formatOutOfScopePoint: function(timestamp) {
       var mode = this.line_stop.line.mode;
+      var style = { light: '', dark: '-dark' }[this.screen.style];
       return '<div class="out-of-scope"> \
-                <img src="./fonts/' + mode + '.svg" /> \
+                <img src="./fonts/' + mode + style + '.svg" /> \
                 <span class="oos-ellipsis"> \
-                  <img src="./fonts/ellipsis.svg" /> \
+                  <img src="./fonts/ellipsis' + style + '.svg" /> \
                 </span> \
                 <span style="position: relative; left: -40px; bottom: 24px;">' +
                   this.formatDate(timestamp) +
@@ -181,9 +186,9 @@ module.exports = {
               '</div>';
     },
     styleGradient: function(t1, t2, ref) {
-      const colorBefore = '#ddd',
+      const colorBefore = { light: '#ddd', dark: '#222' }[this.screen.style],
             colorBetween = '#ff3860', /* Bulma's $red*/
-            colorAfter = '#aaa';
+            colorAfter = { light: '#aaa', dark: '#555' }[this.screen.style];
       var halftrans = 0.005;
       return 'background: linear-gradient(to left, ' + colorBefore + ', '
         + colorBefore  + ' ' + (t1 / ref - halftrans) * 100 + '%, '
@@ -222,18 +227,18 @@ module.exports = {
           </div>
         </div>
       </div>
-      <div class="column is-3 notification has-text-centered vertical-centered theme-bgcolor-1 clock">
+      <div class="column is-3 notification has-text-centered vertical-centered countdown">
         <template v-if="delay > 0">
-          <span class="font-150 cut">partez dans</span>
-          <span class="font-300 cut bold" v-html="htmlDelay"></span>
+          <span class="font-150 cut forceblack">partez dans</span>
+          <span class="font-300 cut bold forceblack" v-html="htmlDelay"></span>
         </template>
         <template v-if="delay == 0">
-          <span class="font-150 cut">partez</span>
-          <span class="font-300 cut now">maintenant</span>
+          <span class="font-150 cut forceblack">partez</span>
+          <span class="font-300 cut now forceblack">maintenant</span>
         </template>
         <template v-if="typeof delay == 'undefined'">
-          <span class="font-200 cut">aucun passage</span>
-          <span class="font-200 cut">imminent</span>
+          <span class="font-200 cut forceblack">aucun passage</span>
+          <span class="font-200 cut forceblack">imminent</span>
         </template>
       </div>
     </div>
@@ -249,14 +254,6 @@ module.exports = {
 </template>
 
 <style>
-
-.theme-bgcolor-1 {
-  background-color: #00d1b2; /* Bulma's $turquoise */
-}
-
-.theme-bgcolor-2 {
-  background-color: #ff3860; /* Bulma's $red*/
-}
 
 .font-300 {
   font-size: 3em;
@@ -278,6 +275,10 @@ module.exports = {
   font-weight: bold;
 }
 
+.forceblack {
+  color: black !important;
+}
+
 .no-wrap {
   white-space: nowrap;
 }
@@ -290,6 +291,10 @@ module.exports = {
 
 .vertical-centered .cut {
   flex-basis: 100%;
+}
+
+.countdown {
+  background-color: #00d1b2; /* Bulma's $turquoise */
 }
 
 @keyframes now {
@@ -321,8 +326,12 @@ module.exports = {
   text-align: center;
 }
 
-.timesignTarget {
+div#wrapper.light .timesignTarget {
   background-color: black !important;
+}
+
+div#wrapper.dark .timesignTarget {
+  background-color: white !important;
 }
 
 .timesignWarning {
@@ -359,7 +368,7 @@ module.exports = {
 .transportline-large .direction {
   height: 50px;
 }
-.transportline-large .clock {
+.transportline-large .countdown {
   min-width: 250px;
 }
 .transportline-large .timeline-padding {
@@ -406,7 +415,7 @@ module.exports = {
 .transportline-medium .direction {
   height: 38px;
 }
-.transportline-medium .clock {
+.transportline-medium .countdown {
   min-width: 188px;
 }
 .transportline-medium .timeline-padding {
@@ -453,7 +462,7 @@ module.exports = {
 .transportline-small .direction {
   height: 38px;
 }
-.transportline-small .clock {
+.transportline-small .countdown {
   min-width: 188px;
 }
 .transportline-small .timeline-padding {
@@ -500,7 +509,7 @@ module.exports = {
 .transportline-tiny .direction {
   height: 30px;
 }
-.transportline-tiny .clock {
+.transportline-tiny .countdown {
   min-width: 150px;
 }
 .transportline-tiny .timeline-padding {
