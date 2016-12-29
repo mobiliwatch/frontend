@@ -96,7 +96,7 @@ module.exports = {
           for (var i = 0; i < points.length; i++) {
             var point = points[i];
             if (point.delay > walking_min_time) {
-              point.class.timesignTarget = true;
+              point.class.timesignTarget = !point.class.timesignWarning;
               delay = Math.max(0, point.delay - walking_max_time);
               break;
             }
@@ -335,8 +335,11 @@ div#wrapper.dark .timesignTarget {
 }
 
 .timesignWarning {
-  color:            #ff3860;            /* Bulma's $red*/
   background-color: #ff3860 !important; /* Bulma's $red*/
+}
+
+.timesignWarning > div.timesign > * {
+  color:            #ff3860 !important; /* Bulma's $red*/
 }
 
 .timesignMissed {
