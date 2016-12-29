@@ -115,20 +115,14 @@ module.exports = {
         },
         points:    [],
       };
-      var prevtime = null;
-      const mindelta = 3.5 * 60 * 1000;
       for (var i = 0; i < times.length; i++) {
         var time = times[i].time * 1000;
-        if (prevtime) {
-          time = Math.max(prevtime + mindelta, time);
-        }
         var point = {
           reference: times[i].reference,
           time:      time + this.offset,
           html:      this.formatPoint(time),
         };
         tl.points.push(point);
-        prevtime = time;
       }
       return tl;
     }
