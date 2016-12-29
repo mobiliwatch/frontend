@@ -1,7 +1,14 @@
 <template>
-  <div class="weather" v-if="widget.revision > 0">
-    <h3 class="title">Météo à {{ widget.city.name }}</h4>
+  <div class="weather" v-if="widget.revision > 0" :style="{ 'font-size': weatherfont * 1.5 + 'em' }">
+    <h3>Météo à {{ widget.city.name }}</h3>
     <hr />
+
+    <ScaleDiv
+      :schema="{
+        refvalue: 350,
+        freedom:  'scale-down'
+      }"
+      v-model="weatherfont" />
 
     <div class="media is-fat">
       <div class="media-left">
@@ -10,8 +17,8 @@
         </span>
       </div>
       <div class="media-content">
-        <p class="title is-3">{{ weather_status_french }}</p>
-        <p class="subtitle is-5">En ce moment</p>
+        <p style="font-size: 1.5em;">{{ weather_status_french }}</p>
+        <p style="font-size: 1.0em;">En ce moment</p>
       </div>
     </div>
 
@@ -27,10 +34,10 @@
       </div>
     </div>
 
-    <div class="media" :style="{color: air_quality.color}" v-if="air_quality">
+    <div class="media" v-if="air_quality">
       <div class="media-left">
         <span class="icon is-medium">
-          <span class="wi wi-smog"></span>
+          <span class="wi wi-smog" :style="{color: air_quality.color }" style="text-shadow: 0 0 1px black"></span>
         </span>
       </div>
       <div class="media-content">
@@ -75,9 +82,13 @@
 
 <script>
 var mixins = require('./mixins.js');
+var ScaleDiv = require('./ScaleDiv.vue');
 
 module.exports = {
   mixins : [mixins, ],
+  components : {
+    'ScaleDiv': ScaleDiv,
+  },
   data : function(){
     return {};
   },

@@ -3,7 +3,13 @@
   <div class="hero-body">
     <div class="container">
       <div class="clock has-text-centered">
-        <p class="time">
+        <p class="time" :style="{ 'font-size': timefont * 4 + 'em' }">
+          <ScaleDiv
+            :schema="{
+              refvalue: 170,
+              freedom:  'scale-down'
+            }"
+            v-model="timefont" />
           <span class="hours">
             {{ hours }}
           </span>
@@ -18,7 +24,13 @@
           </span>
           -->
         </p>
-        <p class="date">
+        <p class="date" :style="{ 'font-size': datefont * 2 + 'em' }">
+          <ScaleDiv
+            :schema="{
+              refvalue: 350,
+              freedom:  'scale-down'
+            }"
+            v-model="datefont" />
           {{ day }} {{ date }} {{ month }} {{ year }}
         </p>
       </div>
@@ -29,9 +41,13 @@
 
 <script>
 var mixins = require('./mixins.js');
+var ScaleDiv = require('./ScaleDiv.vue');
 
 module.exports = {
   mixins : [mixins, ],
+  components : {
+    'ScaleDiv': ScaleDiv,
+  },
   data : function(){
     return {
       rawDate : new Date(),
@@ -83,10 +99,8 @@ module.exports = {
 <style lang="sass" scoped>
 .clock {
   .time {
-    font-size: 4em;
   }
   .date {
-    font-size: 2em;
     color: #888;
   }
 

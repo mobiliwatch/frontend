@@ -1,6 +1,14 @@
 <template>
-  <div class="disruptions">
+  <div class="disruptions" :style="{ 'font-size': disruptionsfont + 'em' }">
     <h1>Perturbations & informations</h1>
+    <hr>
+
+    <ScaleDiv
+      :schema="{
+        refvalue: 750,
+        freedom:  'scale-down'
+      }"
+      v-model="disruptionsfont" />
 
     <div v-for="d in widget.disruptions" class="media">
       <div class="media-left">
@@ -27,9 +35,13 @@
 
 <script>
 var mixins = require('./mixins.js');
+var ScaleDiv = require('./ScaleDiv.vue');
 
 module.exports = {
   mixins : [mixins, ],
+  components : {
+    'ScaleDiv': ScaleDiv,
+  },
   methods: {
     /* FIXME: duplicated code with Transportline.vue */
     disruptionType: function (d) {
