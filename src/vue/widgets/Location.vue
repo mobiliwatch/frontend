@@ -92,7 +92,8 @@ module.exports = {
       }
 
       // Get the height for container
-      var h = this.$el.clientHeight;
+      // Use article height as fallback
+      var h = this.$el.clientHeight || 0.9 * this.$el.parentElement.parentElement.clientHeight;
 
       // Calc nb of items per page
       var per_page = Math.floor(h / this.line_height);

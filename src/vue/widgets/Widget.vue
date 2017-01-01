@@ -22,13 +22,11 @@
         </div>
 
 
-        <div class="content">
-          <Note v-if="widget.type == 'NoteWidget'" :widgetId="widgetId" />
-          <Clock v-if="widget.type == 'ClockWidget'" :widgetId="widgetId" />
-          <Weather v-if="widget.type == 'WeatherWidget'" :widgetId="widgetId" />
-          <Location v-if="widget.type == 'LocationWidget'" :widgetId="widgetId" />
-          <Disruption v-if="widget.type == 'DisruptionWidget'" :widgetId="widgetId" />
-        </div>
+        <Note v-if="widget.type == 'NoteWidget'" :widgetId="widgetId" />
+        <Clock v-if="widget.type == 'ClockWidget'" :widgetId="widgetId" />
+        <Weather v-if="widget.type == 'WeatherWidget'" :widgetId="widgetId" />
+        <Location v-if="widget.type == 'LocationWidget'" :widgetId="widgetId" />
+        <Disruption v-if="widget.type == 'DisruptionWidget'" :widgetId="widgetId" />
       </div>
     </article>
   </div>
@@ -75,7 +73,7 @@ module.exports = {
 <style lang="sass">
 
 div.content {
-  height: 100%; /* propagate height */
+  height: 100% !important; /* propagate height */
 }
 
 /* Dark mode */
