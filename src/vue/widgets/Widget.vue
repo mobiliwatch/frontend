@@ -27,6 +27,7 @@
         <Weather v-if="widget.type == 'WeatherWidget'" :widgetId="widgetId" />
         <Location v-if="widget.type == 'LocationWidget'" :widgetId="widgetId" />
         <Disruption v-if="widget.type == 'DisruptionWidget'" :widgetId="widgetId" />
+        <Twitter v-if="widget.type == 'TwitterWidget'" :widgetId="widgetId" />
       </div>
     </article>
   </div>
@@ -40,6 +41,7 @@ var Clock = require('./Clock.vue');
 var Weather = require('./Weather.vue');
 var Location = require('./Location.vue');
 var Disruption = require('./Disruption.vue');
+var Twitter = require('./Twitter.vue');
 var mixins = require('./mixins.js');
 
 // Manual mixin to support computed
@@ -47,6 +49,7 @@ module.exports = {
   mixins : [mixins, ],
   components : {
     'Note' : Note,
+    'Twitter' : Twitter,
     'Clock' : Clock,
     'Weather' : Weather,
     'Location' : Location,
