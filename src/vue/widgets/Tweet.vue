@@ -1,5 +1,5 @@
 <template>
-  <div class="tweet">
+  <div class="tweet" v-if="tweet">
     <article class="media">
       <div class="media-left">
         <figure class="image is-48x48">
@@ -20,12 +20,14 @@
 </template>
 
 <script>
+var mixins = require('./mixins.js');
 var moment = require('moment'); // date lib
 moment.locale('fr');
 
 module.exports = {
+  mixins : [mixins, ],
   props : {
-    tweet: Object,
+    'tweetId': Number,
   },
   data : function(){
     return {
@@ -35,6 +37,11 @@ module.exports = {
     diff : function(){
       var created = moment(this.tweet.created * 1000);
       return created.fromNow();
+    },
+    tweet : function(){
+      if(!this.widget || !this.widget.tweets)
+        return;
+      return this.widget.tweets[this.tweetId];
     },
   },
 };

@@ -4,7 +4,7 @@
     <h1 v-if="widget.mode == 'timeline'">Votre flux Twitter</h1>
     <h1 v-if="widget.mode == 'user_tweets'">Vos derniers tweets</h1>
 
-    <Tweet :tweet="t" v-for="t in widget.tweets" />
+    <Tweet :widgetId="widgetId" :tweetId="i" v-for="(t,i) in widget.tweets" />
 
     <div class="notification is-info" v-if="!widget.tweets">
       Chargement des tweets...
