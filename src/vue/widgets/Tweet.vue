@@ -1,5 +1,5 @@
 <template>
-  <div class="tweet" v-if="tweet">
+  <div class="tweet" v-if="tweet" v-show="visible">
     <article class="media">
       <div class="media-left">
         <figure class="image is-48x48">
@@ -31,7 +31,22 @@ module.exports = {
   },
   data : function(){
     return {
+      visible: true,
     };
+  },
+  methods : {
+    is_visible : function(){
+      var maxHeight = window.innerHeight;
+      var rect = this.$el.getBoundingClientRect();
+      this.$set(this, 'visible', rect.bottom < maxHeight);
+    }
+  },
+  beforeUpdate : function(){
+    this.is_visible();
+  },
+  mounted: function(){
+    this.is_visible();
+    window.addEventListener('resize', this.is_visible);
   },
   computed : {
     diff : function(){

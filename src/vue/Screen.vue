@@ -147,6 +147,12 @@ module.exports = {
 </template>
 
 <style lang="sass">
+
+// No scrollbar.
+::-webkit-scrollbar {
+    display: none;
+}
+
 nav {
   padding: 0 5px;
   margin-bottom: 4px !important;
